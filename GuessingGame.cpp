@@ -16,6 +16,7 @@ int main()
     srand(time(NULL));
     randomNum=(rand()%101);
     cout << "Welcome to Guessing Game, you have " << guessCount << " guesses to guess the random number between " << lowerLimit << " and " << upperLimit << endl;
+    winCondition = false;
     while(winCondition == false){
       cout<<"Enter your guess: ";
       cin>>input;
