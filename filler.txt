@@ -1,1 +1,2 @@
-ignore
+ignore this file
+Go to master to find Cpp projects
