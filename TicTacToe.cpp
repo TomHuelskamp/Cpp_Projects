@@ -18,6 +18,7 @@ int main(){
   int int_letter;
   int int_number;
   char Board[4][4];
+  bool First_turn=true;
 
   while(one==1){//the while condition is created so that it will never be false, so this is an infinite loop
     
@@ -39,6 +40,7 @@ int main(){
     //Resets the win checking boolean and turn to X, so that the user can play a new game
     Win_condition=false;
     X_turn=true;
+    First_turn=true;
     
     while(Win_condition==false){//The loop for each time there is a new game
      
@@ -139,7 +141,15 @@ int main(){
 	  cout<<"X has: "<<X_win_count<<" wins"<<endl;
 	  cout<<"O has: "<<O_win_count<<" wins"<<endl;
 	}
+      }else if(Board[1][1]!=' '&&Board[1][2]!=' '&&Board[1][3]!=' '&&
+	       Board[2][1]!=' '&&Board[2][2]!=' '&&Board[2][3]!=' '&&
+	       Board[3][1]!=' '&&Board[3][2]!=' '&&Board[3][3]!=' '&& First_turn==false){//If there were no wins, but the board is full, so there is a tie
+	cout<<"Tie Game"<<endl;	
+	cout<<"X has: "<<X_win_count<<" wins"<<endl;
+	cout<<"O has: "<<O_win_count<<" wins"<<endl;
+	Win_condition=true;
       }
+      First_turn=false;
     }
   }
 
