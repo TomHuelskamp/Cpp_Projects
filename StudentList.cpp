@@ -4,12 +4,10 @@
 
 #include <iostream>
 #include <cstring>
+#include <vector>
+
 using namespace std;
 
-void function();
-void Add();
-void Print();
-void Delete();
 
 struct Student {
   char fname[10];
@@ -18,24 +16,53 @@ struct Student {
   float gpa;
 };
 
+void function();
+void Add(vector<Student*> &v);
+void Print(vector<Student*> &v);
+void Delete(vector<Student*> &v);
 
 int main(){
+
+  //Student* Bob;
+  //cin>>Bob.fname;
+  //cin>>Bob.lname;
+  //Bob.id=123;
+  //Bob.gpa=123;
+  
+  vector<Student*> vect;
+
+  
+  
   char command[10];
   
   char fnameInput[10];
   char lnameInput[10];
   int idInput;
   float gpaInput;
-
+  
+  cout<<"Enter 'Add', 'Print', or 'Delete' to the student list: ";
+  
   cin.get(command, 10);
   cin.ignore(100, '\n');
   
   if(command[0]=='A'){//Add
-    Add();
+    Add(vect);
   }else if(command[0]=='P'){//Print
-    Print();
+    Print(vect);
   }else if(command[0]=='D'){//Delete
-    Delete();
+    Delete(vect);
+  }
+  cout<<"Enter 'Add', 'Print', or 'Delete' to the student list: ";
+  
+  cin.get(command, 10);
+  cin.ignore(100, '\n');
+  
+  if(command[0]=='A'){//Add
+    Add(vect);
+  }else if(command[0]=='P'){//Print
+    Print(vect);
+  }else if(command[0]=='D'){//Delete
+    Delete(vect);
   }
 
   /*cout<<"Enter the first name: ";
@@ -62,15 +89,21 @@ int main(){
 }
 
 void function(){
-  cout<<"hello"<<endl;
+  cout<<"h&ello"<<endl;
 }
 
-void Add(){
+void Add(vector<Student*> &v){
   cout<<"adding..."<<endl;
+  Student* Bob = new Student();
+  cin>>Bob->fname;
+  cin>>Bob->lname;
+  Bob->id=123;
+  Bob->gpa=123;
+}  
+void Delete(vector<Student*> &v){
+  cout<<"adding..."<<endl;
+  cout<<Bob->fname;
 }
-void Print(){
-  cout<<"printing..."<<endl;
-}
-void Delete(){
-  cout<<"deleting..."<<endl;
+void Print(vector<Student*> &v){
+  cout<<"adding..."<<endl;
 }
