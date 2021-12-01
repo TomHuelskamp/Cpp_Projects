@@ -6,7 +6,7 @@ using namespace std;
 class Parent{
  public:
   Parent();
-  Parent(int*);
-  int* parentInput;
-  int addOne(parentInput*);
-}
+  Parent(int);
+  int parentInput;
+  int addOne();
+};

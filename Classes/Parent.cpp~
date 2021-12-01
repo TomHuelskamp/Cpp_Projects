@@ -9,4 +9,5 @@ Parent::Parent(){
 }
 int Parent::addOne(){
   parentInput++;
+  return parentInput;
 }
