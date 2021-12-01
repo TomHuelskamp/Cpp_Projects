@@ -1,0 +1,20 @@
+#include <iostream>
+#include <cstring>
+#include <vector>
+
+#include "Parent.h"
+
+using namespace std;
+
+int main(){
+
+  Parent* list[1];
+  vector<Parent*> vect;
+
+  int *inputptr = NULL;
+  int input = 5;
+  inputptr= (int*)input;
+  list[0] = new Parent(inputptr);
+  
+  return 0;
+}
