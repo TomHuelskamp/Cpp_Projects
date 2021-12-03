@@ -4,9 +4,23 @@
 #include <vector>
 #include "Parent.h"
 
+void printVectorDescription(vector<Parent*> &);
+void addMedia();
+void searchMedia();
+void deleteMedia();
 using namespace std;
 int SIZE = 2;
 int main(){
+
+  char input[50];
+  cout<<"enter: ";
+  cin.get(input, 50);
+  cin.get();
+  if(strcmp(input, "ADD")==0){
+  }else if(strcmp(input,"SEARCH")==0){
+  }else if(strcmp(inpuy,"DELETE")==0){
+  }
+  
   Parent* list[SIZE];
   vector<Parent*> vect;
   char* firstDescription = new char[80];
@@ -17,6 +31,12 @@ int main(){
   list[1]=new Parent(secondDescription);
   vect.push_back(list[0]);
   vect.push_back(list[1]);
+  printVectorDescription(vect);
   //print vector 
   return 0;
+}
+void printVectorDescription(vector<Parent*> &newVect){
+  for(vector<Parent*>::iterator it = newVect.begin(); it != newVect.end(); it++){
+      cout<<(*it)->getDescription()<<endl;
+    }   
 }
