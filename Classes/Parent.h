@@ -11,6 +11,6 @@ public:
   char* getDescription();
   int getID();
 private:
-  char* desctiption;
+  char* description;
   int id;
-}
+};

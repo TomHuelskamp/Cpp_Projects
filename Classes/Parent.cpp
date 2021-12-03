@@ -13,3 +13,9 @@ Parent::Parent(char* newdescription){
   strcpy(description, newdescription);//how the char* is put into an accessible char*
   id=0;
 }
+char* Parent::getDescription(){
+  return description;
+}
+int Parent::getID(){
+  return id;
+}
