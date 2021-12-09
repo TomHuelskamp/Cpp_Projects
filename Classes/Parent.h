@@ -1,16 +1,16 @@
 //parent.h
 #include <iostream>
 #include <cstring>
-
+#include <algorithm>
 using namespace std;
 
 class Parent{
-public:
+ public:
   Parent();
-  Parent(char*);
+  Parent(char*, int);
   char* getDescription();
-  int getID();
-private:
+  int getId();
+ private:
   char* description;
   int id;
 };

@@ -1,12 +1,15 @@
+//parent.h
 #include <iostream>
 #include <cstring>
-
 using namespace std;
 
 class Parent{
  public:
   Parent();
-  Parent(int);
-  int parentInput;
-  int addOne();
+  Parent(char*, int);
+  char* getDescription();
+  int getId();
+ private:
+  char* description;
+  int id;
 };
