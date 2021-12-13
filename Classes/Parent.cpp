@@ -1,20 +1,22 @@
-//parent.cpp
+//this is the parent.cpp file for Classes
 #include <iostream>
 #include <cstring>
 #include "Parent.h"
 using namespace std;
 
 Parent::Parent(){
-  //description = new char[80];
 }
-Parent::Parent(char* newdescription,int newId){
+Parent::Parent(char* newdescription,int newId){//converts the users inputs into usable values
   description=new char[80];
-  strcpy(description, newdescription);//how what the user enters in put int description
+  strcpy(description, newdescription);
   id=newId;
 }
-char* Parent::getDescription(){
+char* Parent::getDescription(){//returns the title
   return description;
 }
-int Parent::getId(){
+int Parent::getId(){//returns the year
   return id;
+}
+int Parent::getType(){
+    return 4;
 }
