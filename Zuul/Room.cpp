@@ -26,3 +26,6 @@ void Room::setExit(const char* direction, Room* destination){
 map<const char*, Room*>* Room::getExits(){
   return &Map;
 }
+void Room::setItem(Items newItem){
+  vect.push(Items);
+}

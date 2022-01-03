@@ -1,0 +1,14 @@
+//Items.cpp
+#include <cstring>
+#include <iostream>
+#include "Items.h"
+using namespace std;
+Items::Items(){
+}
+Items::Items(char* newItemName){
+  itemName=new char[100];
+  strcpy(name, newName);
+}
+char* Items::getName(){
+  return itemName;
+}

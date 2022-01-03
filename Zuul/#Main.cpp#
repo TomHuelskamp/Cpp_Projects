@@ -31,6 +31,8 @@ int main(){
   Room* t9= new Room((char*)"t9",(char*)"You are in Terminal 9");
   Room* t10= new Room((char*)"t10",(char*)"You are in Terminal 10");
 
+  
+  
   entrance->setExit("EAST",tsa);
   tsa->setExit("EAST",lounge);
   lounge->setExit("NORTH",t3);
