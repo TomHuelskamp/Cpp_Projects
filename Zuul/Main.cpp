@@ -5,6 +5,9 @@
 #include <cstring>
 #include <vector>
 #include "Room.h"
+#include <map>
+#include <algorithm>
+#include <iterator>
 
 using namespace std;
 
@@ -62,9 +65,33 @@ int main(){
   t9->setExit("EAST",t10);
   t9->setExit("WEST",t8);
   t10->setExit("WEST",t9);
-
+  
   Room* currentroom = entrance;
-  cout<<currentroom->getDescription()<<endl;
+  bool notfalse=true;
+  
+  while (notfalse){
+    cout<<currentroom->getDescription()<<endl;
+    cout<<"exits: ";
+
+    for(map<const char*, Room*>::iterator it = currentroom->getExits()->begin(); it!= currentroom->getExits()->end(); it++){
+      cout<<it->first<<" ";
+    }
+    cout<<endl;
+
+    cout<<"move: ";
+    char move[50];
+    cin.get(move, 50);
+    cin.get();
+
+    for(map<const char*, Room*>::iterator it = currentroom->getExits()->begin(); \
+	it!= currentroom->getExits()->end(); it++){
+      if(strcmp(move, it->first)==0){
+	cout<<"moving... "<<endl;
+	currentroom = it->second;
+	break;
+      }
+    }
+  }
   
   //create map of rooms and exits
   //- create rooms and descriptions, set exits and connecting rooms

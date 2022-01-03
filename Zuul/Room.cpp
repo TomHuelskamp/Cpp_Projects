@@ -3,7 +3,7 @@
 #include <cstring>
 #include <vector>
 #include "Room.h"
-
+#include <map>
 using namespace std;
 
 Room::Room(){
@@ -20,10 +20,9 @@ char* Room::getName(){
 char* Room::getDescription(){
   return description;
 }
-
 void Room::setExit(const char* direction, Room* destination){
+  Map.insert(make_pair(direction, destination));
 }
-//char* Room::setExits(){
-//}
-//char* Room::getExits(){
-//}
+map<const char*, Room*>* Room::getExits(){
+  return &Map;
+}

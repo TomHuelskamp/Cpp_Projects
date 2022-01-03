@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -12,9 +13,10 @@ class Room{
   char* getName();
   char* getDescription();
   void setExit(const char* direction, Room* destination);
-  //char* getExits();
+  void setItem(char*);
+  map<const char*, Room*>* getExits();
  private:
   char* name;
   char* description;
-  //map exits;
+  map<const char*, Room*>Map; 
 };
