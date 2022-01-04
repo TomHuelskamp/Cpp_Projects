@@ -8,13 +8,33 @@
 #include <map>
 #include <algorithm>
 #include <iterator>
-#include "Items.h"
+
 
 using namespace std;
 
+struct Item{
+  char itemname[10];
+};
+
 int main(){
-  cout<<"Welcome to Airport Adventure! To complete the game collect all the Covid variants in the airport and bring them to the exit. To go move, type the direction in all capitals. To pick up an item, type the item name, enter items before movements. Good luck!"<<endl;
+  cout<<"Welcome to Airport Adventure! To complete the game collect all the Covid variants in the airport and bring them to the exit. Make sure to use all caps and good luck!"<<endl;
   
+  vector<Item*>Inventory;
+
+  Item* itemA = new Item();
+  strcpy(itemA->itemname, "ALPHA");
+  Item* itemB = new Item();
+  strcpy(itemB->itemname, "BETA");
+  /**
+  Item* b = new Item();
+  b->name='b';
+  Item* d = new Item();
+  d->name='d';
+  Item* g = new Item();
+  g->name='g';
+  Item* o = new Item();
+  o->name='o';
+  **/
   Room* entrance= new Room((char*)"entrance",(char*)"You are in the Entrance.");
   Room* tsa= new Room((char*)"tsa",(char*)"You are at the TSA.");
   Room* lounge= new Room((char*)"lounge",(char*)"You are in the Lounge.");
@@ -31,6 +51,7 @@ int main(){
   Room* t9= new Room((char*)"t9",(char*)"You are in Terminal 9");
   Room* t10= new Room((char*)"t10",(char*)"You are in Terminal 10");
 
+  
   entrance->setExit("EAST",tsa);
   tsa->setExit("EAST",lounge);
   lounge->setExit("NORTH",t3);
@@ -61,12 +82,22 @@ int main(){
   t9->setExit("EAST",t10);
   t9->setExit("WEST",t8);
   t10->setExit("WEST",t9);
+
+  tsa->setItem(itemA);
+  tsa->setItem(itemB);
   
   Room* currentroom = entrance;
   bool notfalse=true;
   
   while (notfalse){
     cout<<endl<<endl<<currentroom->getDescription()<<endl;
+    cout<<"items: ";
+    
+    for(vector<Item*>::iterator it = currentroom->getItem()->begin(); it!= currentroom->getItem()->end(); it++){
+      cout<<(*it)->itemname<<" ";
+    }
+    
+    cout<<endl;
     cout<<"exits: ";
 
     for(map<const char*, Room*>::iterator it = currentroom->getExits()->begin(); it!= currentroom->getExits()->end(); it++){
