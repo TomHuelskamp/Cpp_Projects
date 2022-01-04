@@ -25,16 +25,13 @@ int main(){
   strcpy(itemA->itemname, "ALPHA");
   Item* itemB = new Item();
   strcpy(itemB->itemname, "BETA");
-  /**
-  Item* b = new Item();
-  b->name='b';
-  Item* d = new Item();
-  d->name='d';
-  Item* g = new Item();
-  g->name='g';
-  Item* o = new Item();
-  o->name='o';
-  **/
+  Item* itemD = new Item();
+  strcpy(itemD->itemname, "DELTA");
+  Item* itemG = new Item();
+  strcpy(itemG->itemname, "GAMMA");
+  Item* itemO = new Item();
+  strcpy(itemO->itemname, "OMNICRON");
+  
   Room* entrance= new Room((char*)"entrance",(char*)"You are in the Entrance.");
   Room* tsa= new Room((char*)"tsa",(char*)"You are at the TSA.");
   Room* lounge= new Room((char*)"lounge",(char*)"You are in the Lounge.");
@@ -83,8 +80,12 @@ int main(){
   t9->setExit("WEST",t8);
   t10->setExit("WEST",t9);
 
-  tsa->setItem(itemA);
-  tsa->setItem(itemB);
+  t1->setItem(itemA);
+  t2->setItem(itemG);
+  tsa->setItem(itemD);
+  foodcourt->setItem(itemO);
+  t8->setItem(itemB);
+  
   
   Room* currentroom = entrance;
   bool notfalse=true;
