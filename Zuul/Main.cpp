@@ -1,6 +1,7 @@
-//This is a text-based adventure game
+//This is a text-based adventure game, full description on line 18
 //Thomas Huelskamp
-//
+//January 5, 2022
+
 #include <iostream>
 #include <cstring>
 #include <vector>
@@ -8,18 +9,17 @@
 #include <map>
 #include <algorithm>
 #include <iterator>
-
 using namespace std;
 
-struct Item{
+struct Item{//struct for item, the only object that is a member of item is the name, this is used to display items and take input information about items  
   char itemname[10];
 };
 
 int main(){
-  cout<<"Welcome to Airport Adventure! To complete the game collect all the Covid variants in the airport and bring them to the exit. Good luck!"<<endl<<" - type in single word responses"<<endl<<" - type in all caps"<<endl<<" - to skip a prompt type 'NONE'"<<endl;
-  
-  vector<Item*>Inventory;
+  cout<<"Welcome to Airport Adventure! To complete the game collect all the Covid variants in the airport and bring them to the exit. Good luck!"<<endl<<" - type in single word responses"<<endl<<" - type in all caps"<<endl<<" - to skip a prompt type 'NONE'"<<endl;//description and rules of the game, this is only displayed once
 
+  vector<Item*>Inventory;//vector of item pointers used for player inventory, starts out as empty
+  //creates item pointers and names  for the 5 Covid variants
   Item* itemA = new Item();
   strcpy(itemA->itemname, "ALPHA");
   Item* itemB = new Item();
@@ -29,8 +29,9 @@ int main(){
   Item* itemG = new Item();
   strcpy(itemG->itemname, "GAMMA");
   Item* itemO = new Item();
-  strcpy(itemO->itemname, "OMNICRON");
-  
+  strcpy(itemO->itemname, "OMICRON");
+
+  //creates room class pointers for each room, including their name and description
   Room* entrance= new Room((char*)"entrance",(char*)"You are in the Entrance.");
   Room* tsa= new Room((char*)"tsa",(char*)"You are at the TSA.");
   Room* lounge= new Room((char*)"lounge",(char*)"You are in the Lounge.");
@@ -46,8 +47,7 @@ int main(){
   Room* t8= new Room((char*)"t8",(char*)"You are in Terminal 8");
   Room* t9= new Room((char*)"t9",(char*)"You are in Terminal 9");
   Room* t10= new Room((char*)"t10",(char*)"You are in Terminal 10");
-
-  
+  //sets exits for each room including the direction and destination of each exit
   entrance->setExit("EAST",tsa);
   tsa->setExit("EAST",lounge);
   lounge->setExit("NORTH",t3);
@@ -78,37 +78,34 @@ int main(){
   t9->setExit("EAST",t10);
   t9->setExit("WEST",t8);
   t10->setExit("WEST",t9);
-
+  //sets items in the rooms with items
   t1->setItem(itemA);
   t2->setItem(itemG);
   tsa->setItem(itemD);
   foodcourt->setItem(itemO);
   t8->setItem(itemB);
   
+  Room* currentroom = entrance;//the game starts with the user in entrance
+  bool wincondition=false;//wincondition in a while loop to check wether or not the game ends
   
-  Room* currentroom = entrance;
-  bool notfalse=true;
-  
-  while (notfalse){
-    cout<<endl<<endl<<currentroom->getDescription()<<endl;
+  while (!wincondition){//if win conditions are true the game ends, otherwise it continues to display all the room information and prompt for all player moves
+    cout<<endl<<endl<<currentroom->getDescription()<<endl;//displays the description of the current room
+    //for loop goes through the item pointer vector from the room class and displays each item in the room using iterators
     cout<<"items: ";
-    
     for(vector<Item*>::iterator it = currentroom->getItem()->begin(); it!= currentroom->getItem()->end(); it++){
       cout<<(*it)->itemname<<" ";
     }
-    
-    cout<<endl;
-    cout<<"exits: ";
-
+    //for loop goes through the map of directions and destinations for the exits of the current room and displats the directions using iterators
+    cout<<endl<<"exits: ";
     for(map<const char*, Room*>::iterator it = currentroom->getExits()->begin(); it!= currentroom->getExits()->end(); it++){
       cout<<it->first<<" ";
     }
-    cout<<endl<<endl;
-
-    cout<<"pick up: ";
+    //prompts the user for the item they want to pick up
+    cout<<endl<<endl<<"pick up: ";
     char get[50];
     cin.get(get, 50);
     cin.get();
+    //if statements check if the user entered the name of an item and add matching items to the inventory as well as remove the item from the current room
     if(strcmp(get, itemA->itemname)==0){
       currentroom->takeItem(itemA);
       Inventory.push_back(itemA);
@@ -125,11 +122,12 @@ int main(){
       currentroom->takeItem(itemO);
       Inventory.push_back(itemO);
     }
-
+    //prompts the user to drop items
     cout<<"drop: ";
     char drop[50];
     cin.get(drop, 50);
     cin.get();
+    //if statements check if the users input matches one of the items, removes items from the inventory, and adds items to the current room
     if(strcmp(drop, itemA->itemname)==0){
       currentroom->setItem(itemA);
       Inventory.erase(find(Inventory.begin(), Inventory.end(), itemA));
@@ -146,26 +144,23 @@ int main(){
       currentroom->setItem(itemO);
       Inventory.erase(find(Inventory.begin(), Inventory.end(), itemO));
     }
-    
+    //prompts the user for the direction they want to move out of their current room
     cout<<"move: ";
     char move[50];
     cin.get(move, 50);
     cin.get();
-
     for(map<const char*, Room*>::iterator it = currentroom->getExits()->begin(); \
-	it!= currentroom->getExits()->end(); it++){
+	it!= currentroom->getExits()->end(); it++){//for loop goes through the map of directions and destination and if what the user entered matches a direction, sets the current room to the corresponding destination
       if(strcmp(move, it->first)==0){
 	currentroom = it->second;
 	break;
       }
     }
-
-    if(Inventory.size()==5 && currentroom==exit){
+    if(Inventory.size()==5 && currentroom==exit){//if the user's inventory is full of all 5 covid variants, and they are at the exit, the user wins, and the program stops running
       cout<<"Nice job, you have brought all the variants to the exit and you win!";
-      break;
+      wincondition=true;
+      //break;
     }
-
-  }
-  
+  }  
   return 0;
 }
