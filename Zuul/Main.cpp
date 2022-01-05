@@ -9,7 +9,6 @@
 #include <algorithm>
 #include <iterator>
 
-
 using namespace std;
 
 struct Item{
@@ -17,7 +16,7 @@ struct Item{
 };
 
 int main(){
-  cout<<"Welcome to Airport Adventure! To complete the game collect all the Covid variants in the airport and bring them to the exit. Make sure to use all caps and good luck!"<<endl;
+  cout<<"Welcome to Airport Adventure! To complete the game collect all the Covid variants in the airport and bring them to the exit. Good luck!"<<endl<<" - type in single word responses"<<endl<<" - type in all caps"<<endl<<" - to skip a prompt type 'NONE'"<<endl;
   
   vector<Item*>Inventory;
 
@@ -104,8 +103,50 @@ int main(){
     for(map<const char*, Room*>::iterator it = currentroom->getExits()->begin(); it!= currentroom->getExits()->end(); it++){
       cout<<it->first<<" ";
     }
-    cout<<endl;
+    cout<<endl<<endl;
 
+    cout<<"pick up: ";
+    char get[50];
+    cin.get(get, 50);
+    cin.get();
+    if(strcmp(get, itemA->itemname)==0){
+      currentroom->takeItem(itemA);
+      Inventory.push_back(itemA);
+    }else if(strcmp(get, itemB->itemname)==0){
+      currentroom->takeItem(itemB);
+      Inventory.push_back(itemB);
+    }else if(strcmp(get, itemD->itemname)==0){
+      currentroom->takeItem(itemD);
+      Inventory.push_back(itemD);
+    }else if(strcmp(get, itemG->itemname)==0){
+      currentroom->takeItem(itemG);
+      Inventory.push_back(itemG);
+    }else if(strcmp(get, itemO->itemname)==0){
+      currentroom->takeItem(itemO);
+      Inventory.push_back(itemO);
+    }
+
+    cout<<"drop: ";
+    char drop[50];
+    cin.get(drop, 50);
+    cin.get();
+    if(strcmp(drop, itemA->itemname)==0){
+      currentroom->setItem(itemA);
+      Inventory.erase(find(Inventory.begin(), Inventory.end(), itemA));
+    }else if(strcmp(drop, itemB->itemname)==0){
+      currentroom->setItem(itemB);
+      Inventory.erase(find(Inventory.begin(), Inventory.end(), itemB));
+    }else if(strcmp(drop, itemD->itemname)==0){
+      currentroom->setItem(itemD);
+      Inventory.erase(find(Inventory.begin(), Inventory.end(), itemD));
+    }else if(strcmp(drop, itemG->itemname)==0){
+      currentroom->setItem(itemG);
+      Inventory.erase(find(Inventory.begin(), Inventory.end(), itemG));
+    }else if(strcmp(drop, itemO->itemname)==0){
+      currentroom->setItem(itemO);
+      Inventory.erase(find(Inventory.begin(), Inventory.end(), itemO));
+    }
+    
     cout<<"move: ";
     char move[50];
     cin.get(move, 50);
@@ -114,11 +155,16 @@ int main(){
     for(map<const char*, Room*>::iterator it = currentroom->getExits()->begin(); \
 	it!= currentroom->getExits()->end(); it++){
       if(strcmp(move, it->first)==0){
-	cout<<"moving... "<<endl;
 	currentroom = it->second;
 	break;
       }
     }
+
+    if(Inventory.size()==5 && currentroom==exit){
+      cout<<"Nice job, you have brought all the variants to the exit and you win!";
+      break;
+    }
+
   }
   
   return 0;

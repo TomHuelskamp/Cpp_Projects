@@ -16,6 +16,7 @@ class Room{
   void setExit(const char* direction, Room* destination);
   map<const char*, Room*>* getExits();
   void setItem(Item* newItem);
+  void takeItem(Item* newItem);
   vector<Item*>* getItem();
  private:
   char* name;

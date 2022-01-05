@@ -29,6 +29,9 @@ map<const char*, Room*>* Room::getExits(){
 void Room::setItem(Item* newItem){
   Vect.push_back(newItem);
 }
+void Room::takeItem(Item* newItem){
+  Vect.erase(find(Vect.begin(),Vect.end(),newItem));
+}
 vector<Item*>* Room::getItem(){
   return &Vect;
 }
