@@ -8,13 +8,19 @@ class Student{
  public:
   Student();
   ~Student();
-  void setStudentName(char*);
-  char* getStudentName();
+  void setStudentfName(char*);
+  char* getStudentfName();
+  void setStudentlName(char*);
+  char* getStudentlName();
   void setStudentID(int);
   int getStudentID();
+  void setStudentGPA(float);
+  float getStudentGPA();
  private:
-  char* name;
+  char* fname;
+  char* lname;
   int ID;
+  float GPA;
 };
 
 #endif
