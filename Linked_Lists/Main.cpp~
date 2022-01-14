@@ -8,15 +8,12 @@
 using namespace std;
 
 int main(){
-  char fnameInput[]="john";
+  Student studentInput = new Student();
   
-  char lnameInput[]="doe";
-  
-  Student* studentInput = new Student();
-  studentInput->setStudentfName(fnameInput);
-  studentInput->setStudentlName(lnameInput);
-  studentInput->setStudentID(12345);
-  studentInput->setStudentGPA(4.0);
+  studentInput.setStudentfName("john");
+  studentInput.setStudentlName("doe");
+  studentInput.setStudentID(12345);
+  studentInput.setStudentGPA(4.0);
 
   
   
@@ -24,14 +21,14 @@ int main(){
   Node* current=head;
   if (current==NULL){
     head=new Node();
-    head->setStudent(studentInput);
+    head->setStudent(studentInput*);
   }
   else{
     while(current->getNext() != NULL){
       current = current->getNext();
     }
     current->setNext(new Node());
-    current->getNext()->setStudent(studentInput);
+    current->getNext()->setStudent(studentInput*);
   }
   cout<<"running...";
   return 0;
