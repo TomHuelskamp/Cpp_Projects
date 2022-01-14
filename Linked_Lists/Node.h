@@ -1,5 +1,6 @@
 //Node.h
 #include <iostream>
+#include "Student.h"
 using namespace std;
 
 class Node{
@@ -8,9 +9,9 @@ class Node{
   ~Node();
   void setNext(Node*);
   Node* getNext();
-  void setValue(int);
-  int getValue();
+  void setStudent(Student*);
+  Student*  getStudent();
  private:
-    int value;
+    Student* st;
     Node* next;
 };

@@ -1,11 +1,11 @@
 //Node.cpp
 #include "Node.h"
 Node::Node(){//constructor
-  value=0;
+  st=NULL;
   next=NULL;
 }
 Node::~Node(){//destructor
-  delete &value;
+  delete &st;
   next=NULL;
 }
 void Node::setNext(Node* newNext){
@@ -14,9 +14,9 @@ void Node::setNext(Node* newNext){
 Node*  Node::getNext(){
   return next;
 }
-void Node::setValue(int newValue){
-  value=newValue;
+void Node::setStudent(Student* newStudent){
+  st=newStudent;
 }
-int Node::getValue(){
-  return value;
+Student*  Node::getStudent(){
+  return st;
 }

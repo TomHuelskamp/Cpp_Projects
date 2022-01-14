@@ -3,6 +3,7 @@
 //January 12, 2022
 #include <iostream>
 #include "Node.h"
+#include "Student.h"
 using namespace std;
 void  add(int newInput);
 void  search();
@@ -18,8 +19,8 @@ int main(){
     int input;
     cout<<"add: ";
     cin>>input;
-    add(input);
-    print(head);
+    //add(input);
+    //print(head);
   } 
   return 0;
 }
@@ -27,13 +28,13 @@ void add(int newInput){
   Node* current = head;
   if(current==NULL){//
     head = new Node();
-    head -> setValue(newInput);
+    //head -> setValue(newInput);
   }else{
     while(current->getNext() != NULL ){
       current = current->getNext();
     }
     current->setNext(new Node());
-    current->getNext()->setValue(newInput);
+    //current->getNext()->setValue(newInput);
   }
 }
 void search(){
@@ -45,8 +46,8 @@ void  print(Node* next){
     cout<<"list: ";
   }
   if(next != NULL){
-    cout<<next->getValue()<< " ";
-    print(next->getNext());
+    //cout<<next->getValue()<< " ";
+    //print(next->getNext());
   }
   if(next==NULL){
     cout<<endl;
