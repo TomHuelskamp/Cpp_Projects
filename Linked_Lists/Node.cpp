@@ -1,10 +1,10 @@
 //Node.cpp
 #include "Node.h"
-Node::Node(){//constructor
+Node::Node(){
   st=NULL;
   next=NULL;
 }
-Node::~Node(){//destructor
+Node::~Node(){
   delete &st;
   next=NULL;
 }
