@@ -5,7 +5,7 @@ Node::Node(){
   next=NULL;
 }
 Node::~Node(){
-  delete st;
+  delete &st;
   next=NULL;
 }
 void Node::setNext(Node* newNext){

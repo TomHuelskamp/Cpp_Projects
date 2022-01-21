@@ -21,6 +21,8 @@ int main(){
   Node* head=NULL;
   Node* current=head;
   Node* next=head;
+
+  //add
   if (current==NULL){
     head=new Node();
     head->setStudent(studentInput);
