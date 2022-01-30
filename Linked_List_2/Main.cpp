@@ -8,7 +8,7 @@ using namespace std;
 void add(Node* &head);
 void add2(Node* &head, Node* &current, Student* student);
 void print(Node* head);
-void remove(Node* &head);
+void remove(Node* &head, Node* &current, int input);
 void average(Node* head, float quantity, float total);
 int main(){
   Node* head = NULL;
@@ -28,12 +28,16 @@ int main(){
     }else if(strcmp(input, "PRINT")==0){
       print(head);
     }else if(strcmp(input,"DELETE")==0){
-      remove(head);
+      cout<<"enter ID: ";
+      int input2;
+      cin>>input2;
+      remove(head,head, input2);
     }else if(strcmp(input, "AVERAGE")==0){
       average(head, 0, 0);
     }
     //cin.clear();
-    cin.ignore(INT_MAX, '\n');
+    //cin.ignore(INT_MAX, '\n');
+    cin.get();
     strcpy(input, "HELLO");
     //cout<<"bebop";
   }
@@ -96,9 +100,28 @@ void print(Node* head){
   if(head->getNext()!=NULL){
     print(head->getNext());
   }
-  cin.get();
 }
-void remove(Node* &head){
+void remove(Node* &head, Node* &current, int input){
+  Node* temp=current->getNext();
+  if(head->getStudent()->getID()==input){
+    current->~Node();
+    current=temp;
+  }else if(temp->getStudent()->getID()==input){
+    Node* temp2 = temp->getNext();
+    temp->~Node();
+    current->setNext(temp2);
+  }else{
+    remove(head, temp, input);
+  }
+  
+  /**else if(current->getNext()->getStudent()->getID()==input){
+    Node* temp = current->getNext();
+    current->setNext(current->getNext()->getNext());
+    delete temp;
+  }else{
+    Node* temp = current->getNext();
+    remove(head, temp, input);
+    }**/
 }
 void average(Node* head, float quantity, float total){
   if(head->getNext()!=NULL){
@@ -106,5 +129,4 @@ void average(Node* head, float quantity, float total){
       }else{
     cout<<setprecision(2)<<total/quantity<<endl;
   }
-  cin.get();
 }
