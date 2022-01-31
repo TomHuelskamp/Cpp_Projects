@@ -7,12 +7,12 @@ using namespace std;
 
 class Student{
  public:
-  Student(char* newFname, char* newLname, int newID, float newGPA);
-  ~Student();
-  char* getFname();
-  char* getLname();
-  int getID();
-  float getGPA();
+  Student(char* newFname, char* newLname, int newID, float newGPA);//student constructor with first name, last name, ID, and GPA
+  ~Student();//student destructor
+  char* getFname();//returns first name
+  char* getLname();//returns last name
+  int getID();//returns ID
+  float getGPA();//returns gpa
  private:
   char* Fname;
   char* Lname;
