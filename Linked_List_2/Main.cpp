@@ -84,7 +84,6 @@ void add2(Node* &head, Node* &current,  Student* student){//the second add class
   }
   else if(student->getID()<head->getStudent()->getID()){//if the student being added has the smallest ID number in the linked list
     Node* temp = current;
-    cout<<"case 2";
     head  = new Node(student);
     head->setNext(temp);
   } else if(current->getNext()==NULL){//if the student being added has the highest ID number
