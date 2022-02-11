@@ -8,10 +8,14 @@ struct node{
 void push(node* &,char*);
 void pop(node* &);
 void peek(node*);
+void enqueue(node* &, char*);
+void dequeue(node* &);
+void test(node*);
 int main(){
   node* stackHead = new node();
   stackHead->value=NULL;
-  node* queueHead;
+  node* queueHead = new node();
+  queueHead->value=NULL;
   bool loop=true;
   while(loop){
     char choice[50];
@@ -28,12 +32,21 @@ int main(){
       pop(stackHead);
     }else if(strcmp(choice,"peek")==0){
       peek(stackHead);
+    }else if(strcmp(choice,"enqueue")==0){
+      cout<<"enter enqueue char: ";
+      cin>>input;
+      cin.get();
+      enqueue(queueHead, input);
+    }
+    else if(strcmp(choice,"dequeue")==0){
+      dequeue(queueHead);
+    }
+    else if(strcmp(choice,"test")==0){
+      test(queueHead);
     }
   }
   return 0;
 }
-//need to add null for first new node
-//need to prevent the user from deleting/modifying empty stack
 void push(node* &stackHead, char* input){
   node* stackTemp = new node();
   stackTemp->value = input;
@@ -56,4 +69,45 @@ void peek(node* stackHead){
   }else{
   cout<<stackHead->value<<endl;
   }
+}
+void enqueue(node* &queueHead, char* input){
+  //node* queuqueTemp = new node();
+  if(queueHead->value==NULL){//if the queue is empty (there is only a null node)
+    cout<<"first"<<endl;
+    node* queueTemp = new node();
+    queueTemp->value=NULL;
+    queueHead->value=input;
+    queueHead->next=queueTemp;
+  }else{
+    cout<<"not first"<<endl;
+    node* queueTemp = new node();
+    queueTemp = queueHead;
+    while(queueTemp->next->next!=NULL){
+      queueTemp=queueTemp->next;
+    }
+    node* queueTemp2 = new node();
+    node* queueTail = new node();
+    queueTail->value=NULL;
+    queueTemp2->value=input;
+    queueTemp->next=queueTemp2;
+    queueTemp2->next=queueTail;
+  }
+}
+void dequeue(node* &queueHead){
+  if(queueHead->value==NULL){
+    cout<<"cannot dequeue, queue is empty"<<endl;
+  }else{
+    node* queueTemp = new node();
+    queueTemp=queueHead->next;
+    delete queueHead;
+    queueHead=queueTemp;
+  }
+}
+void test(node* queueHead){
+  cout<<"testing"<<endl;
+  while(queueHead->value!=NULL){
+    cout<<queueHead->value;
+    queueHead=queueHead->next;
+  }
+  cout<<endl;
 }
