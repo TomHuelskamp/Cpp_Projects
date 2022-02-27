@@ -25,8 +25,8 @@ int main(){
 
   for(int i=0; i<strlen(expression);i++){
     char o2 = expression[i];
-    int o2p;
-    char o2a;
+    int o2p=0;
+    char o2a='n';
     if(o2=='+'){
       o2p=2;
       o2a='l';
@@ -46,15 +46,39 @@ int main(){
     if(o2>='1'&&o2<='9'){//number
       enqueue(queueHead, o2);//pushing number to the output queue
     }
-    
     else if(o2>='('&&o2<='+'||o2=='-'||o2=='/'||o2=='^'){//operator
-      if((o2=='+'||o2=='-')&& (peek(stackHead)=='*'||peek(stackHead)=='/')){//lower precedence head (multiply or divide)
-	while(stacklength>0){
+      if(o2=='+'||o2=='-'||o2=='*'||o2=='/'||o2=='^'){//
+	char o1 = peek(stackHead);
+	int o1p=0;
+	if(o1=='+'){
+	  o1p=2;
+	}else if(o1=='-'){
+	  o1p=2;
+	}else if(o1=='*'){
+	  o1p=3;
+	}else if(o1=='/'){
+	  o1p=3;
+	}else if(o1=='^'){
+	  o1p=4;
+	}
+	while((stacklength!=0 && o1p>o2p)||(stacklength!=0&&o1p==o2p&&o2a=='l')){
 	  enqueue(queueHead, peek(stackHead));
 	  pop(stackHead);
 	  stacklength--;
+	  char o1 = peek(stackHead);
+	  if(o1=='+'){
+	    o1p=2;
+	  }else if(o1=='-'){
+	    o1p=2;
+	  }else if(o1=='*'){
+	    o1p=3;
+	  }else if(o1=='/'){
+	    o1p=3;
+	  }else if(o1=='^'){
+	    o1p=4;
+	  }
 	}
-	push(stackHead,o2);
+	push(stackHead, o2);
 	stacklength++;
       }else if(o2=='('){//left parentheses
 	push(stackHead, o2);
@@ -68,10 +92,6 @@ int main(){
 	//left parentheses found and discarded:
 	pop(stackHead);
 	stacklength--;
-      }else{//higher precedence head
-	push(stackHead, o2);//pushing operator to the operator stack
-	stacklength++;
-      }
     }
     else if(o2==' '){//space
     }
@@ -79,6 +99,7 @@ int main(){
       cout<<endl<<"invalid expression, try again"<<endl;
       break;
     }
+  }
   }
   while(stacklength>0){
     enqueue(queueHead, peek(stackHead));
