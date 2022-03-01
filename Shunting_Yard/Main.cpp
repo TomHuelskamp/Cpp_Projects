@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include "Node.h"
 using namespace std;
 struct node{
   char value;
@@ -12,6 +13,9 @@ void enqueue(node* &, char);
 void dequeue(node* &);
 char test(node*);
 void printOutput(node*);
+
+
+
 int main(){
   node* stackHead = new node();
   stackHead->value='\0';
@@ -19,6 +23,7 @@ int main(){
   queueHead->value='\0';
   bool loop=true;
   char expression[50];
+  cout<<"Enter an expression in infix notation: ";
   cin.get(expression, 50);
   cin.get();
   int stacklength=0;
@@ -101,13 +106,17 @@ int main(){
     }
   }
   }
+
   while(stacklength>0){
     enqueue(queueHead, peek(stackHead));
     pop(stackHead);
     stacklength--;
   }
+  
+  cout<<"Shunting-Yard postfix expression: ";
   printOutput(queueHead);
-  return 0;
+  
+ return 0;
 }
 
 void push(node* &stackHead, char input){
@@ -165,6 +174,11 @@ char test(node* queueHead){
 }
 void printOutput(node* queueHead){
   cout<<queueHead->value;
+  if(queueHead->value>='1'&&queueHead->value<='9'){//char is an oprerand, create new node and push to stack
+    cout<<" operand"<<endl;
+  }else if((queueHead->value>='('&&queueHead->value<='+')||queueHead->value=='-'||queueHead->value=='/'){//char is an operator, pop t1 t2 and push to stack
+    cout<<" operator"<<endl;
+  }
   if(queueHead->next->value!='\0'){
     printOutput(queueHead->next);
   }
