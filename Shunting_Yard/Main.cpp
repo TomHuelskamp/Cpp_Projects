@@ -6,14 +6,20 @@ struct node{
   char value;
   node* next;
 };
+struct node2{
+  Node* value2;
+  node2* next2;
+};
 void push(node* &,char);
 void pop(node* &);
 char peek(node*);
 void enqueue(node* &, char);
 void dequeue(node* &);
 char test(node*);
-void printOutput(node*);
-
+void printOutput(node*, node2* &);
+void push2(node2* &, Node*);
+void pop2(node2* &);
+Node* peek2(node2*);
 
 
 int main(){
@@ -114,7 +120,9 @@ int main(){
   }
   
   cout<<"Shunting-Yard postfix expression: ";
-  printOutput(queueHead);
+  node2* stackHead2 = new node2;
+  stackHead2->value2=NULL;
+  printOutput(queueHead, stackHead2);
   
  return 0;
 }
@@ -172,14 +180,38 @@ void dequeue(node* &queueHead){
 char test(node* queueHead){
   return queueHead->value;
 }
-void printOutput(node* queueHead){
-  cout<<queueHead->value;
+
+void printOutput(node* queueHead, node2* &stackHead2){
+  cout<<queueHead->value<<' ';
   if(queueHead->value>='1'&&queueHead->value<='9'){//char is an oprerand, create new node and push to stack
-    cout<<" operand"<<endl;
+    Node* opernd = new Node(queueHead->value, NULL, NULL);
+    push2(stackHead2, opernd);
   }else if((queueHead->value>='('&&queueHead->value<='+')||queueHead->value=='-'||queueHead->value=='/'){//char is an operator, pop t1 t2 and push to stack
-    cout<<" operator"<<endl;
+    Node* oper = new Node(queueHead->value, peek2(stackHead2), peek2(stackHead2->next2));
+    pop2(stackHead2);
+    pop2(stackHead2);
+    push2(stackHead2, oper);
   }
   if(queueHead->next->value!='\0'){
-    printOutput(queueHead->next);
+    printOutput(queueHead->next, stackHead2);
   }
+}
+void push2(node2* &stackHead2, Node* inputNode){
+  node2* stackTemp2 = new node2;
+  stackTemp2->value2 = inputNode;
+  stackTemp2->next2 = stackHead2;
+  stackHead2 = stackTemp2;
+}
+void pop2(node2* &stackHead2){
+  //if(stackHead2->value2==NULL){
+  //cout<<"test a error";
+  //}else{
+  node2* stackTemp2 = new node2();
+  stackTemp2=stackHead2->next2;
+  delete stackHead2;
+  stackHead2=stackTemp2;
+  //}
+}
+Node* peek2(node2* stackHead2){
+  return stackHead2->value2;
 }
