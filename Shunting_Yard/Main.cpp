@@ -20,6 +20,9 @@ void printOutput(node*, node2* &);
 void push2(node2* &, Node*);
 void pop2(node2* &);
 Node* peek2(node2*);
+void printInfix(Node*);
+void printPrefix(Node*);
+void printPostfix(Node*);
 
 
 int main(){
@@ -123,7 +126,12 @@ int main(){
   node2* stackHead2 = new node2;
   stackHead2->value2=NULL;
   printOutput(queueHead, stackHead2);
-  
+  cout<<endl<<"Binary expression tree infix expression:";
+  printInfix(peek2(stackHead2));
+  cout<<endl<<"Binary expression tree prefix expression:";
+  printPrefix(peek2(stackHead2));
+  cout<<endl<<"Binary expression tree postfix espression:";
+  printPostfix(peek2(stackHead2));
  return 0;
 }
 
@@ -214,4 +222,52 @@ void pop2(node2* &stackHead2){
 }
 Node* peek2(node2* stackHead2){
   return stackHead2->value2;
+}
+void printInfix(Node* tree){
+  if(tree!=NULL){
+    if(tree->getValue()=='+'
+       ||tree->getValue()=='-'
+       ||tree->getValue()=='*'
+       ||tree->getValue()=='/'
+       ||tree->getValue()=='^'){
+      cout<<"(";
+    }
+    if(tree->getRight()!=NULL){
+      printInfix(tree->getRight());
+    }
+    cout<<' '<<tree->getValue();
+    if(tree->getLeft()!=NULL){
+      printInfix(tree->getLeft());
+    }
+    if(tree->getValue()=='+'||
+       tree->getValue()=='-'||
+       tree->getValue()=='*'||
+       tree->getValue()=='/'||
+       tree->getValue()=='^'){
+      cout<<')';
+    }
+     
+  }
+}
+void printPrefix(Node* tree){
+  if(tree!=NULL){
+    if(tree->getRight()!=NULL){
+      printPrefix(tree->getRight());
+    }
+    if(tree->getLeft()!=NULL){
+      printPrefix(tree->getLeft());
+    }
+    cout<<' '<<tree->getValue();
+  }
+}
+void printPostfix(Node* tree){
+  if(tree!=NULL){
+    cout<<' '<<tree->getValue();
+    if(tree->getRight()!=NULL){
+      printPostfix(tree->getRight());
+    }
+    if(tree->getLeft()!=NULL){
+      printPostfix(tree->getLeft());
+    }
+  }
 }
