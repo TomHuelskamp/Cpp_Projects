@@ -11,11 +11,13 @@ struct node{//Linked List node to go in the hash table so that multipple student
   Student* value;
   node* next;
 };
-void add(node* table[]);
+void add(node* table[], int &size);
 //void hashf(node* table[], node* n);
-void test(node* table[]);
-void print(node* table[]);
-void rehash(node* table[]);
+void test(node* table[], int &size);
+void print(node* table[], int &size);
+void rehash(node* table[], int &size);
+void hash(node* table[], int &size, char ifname[20], char ilname[20], int iid, float igpa);
+
 int main(){
   bool constant=true;
   int size = 100;
@@ -29,24 +31,27 @@ int main(){
     cin.get(input,10);
     cin.get();
     if(strcmp(input,"add")==0){//add
-      add(table);
+      add(table, size);
     }else if(strcmp(input,"test")==0){//search
-      test(table);
+      test(table, size);
     }else if(strcmp(input,"print")==0){//print
-      print(table);
+      print(table, size);
     }else if(strcmp(input,"quit")==0){//quit
       break;
+    }else if(strcmp(input,"rehash")==0){//rehash
+      rehash(table, size);
     }
+    //hash
   }
   return 0;
 }
-void add(node* table[]){//creates a student node and passes it into hash
+void add(node* table[], int &size){//creates a student node and passes it into hash
   Student* s = new Student();//create new student
   cout<<"first name: ";
-  cin.get(s->fname,10);
+  cin.get(s->fname,20);
   cin.get();
   cout<<"last name: ";
-  cin.get(s->lname,10);
+  cin.get(s->lname,20);
   cin.get();
   cout<<"id (must be at least 4 digits): ";//id needs to be longer than size
   cin>>s->id;
@@ -55,7 +60,7 @@ void add(node* table[]){//creates a student node and passes it into hash
   cin.ignore(100, '\n');
   node* n = new node();//create new node
   n->value=s;//assign student to node
-  int size = 100;
+  //int size = 100;
   if(table[(n->value->id)%size]==NULL){//empty spot in hash table
     table[(n->value->id)%size]=n;
     cout<<"added as a first node in the hash table";
@@ -76,8 +81,8 @@ void add(node* table[]){//creates a student node and passes it into hash
   }
   cout<<endl;
 }
-void test(node* table[]){
-  int size=100;
+void test(node* table[], int &size){
+  // int size=100;
   int id3;
   cout<<"id to be printed: ";
   cin>>id3;
@@ -110,8 +115,8 @@ void test(node* table[]){
   cout<<endl;
   cin.ignore(100, '\n');
 }
-void print(node* table[]){
-  int size=100;
+void print(node* table[], int &size){
+  // int size =100;
   for(int i=0; i<size;i++){
     if(table[i]!=NULL){
      cout<<table[i]->value->fname
@@ -133,5 +138,45 @@ void print(node* table[]){
     }
   }
 }
-void rehash(node* table[]){
+void rehash(node* table[], int &size){
+  // int size =100;
+  int size2=size*2;
+  node* table2[size2];
+  for(int i=0; i<size2;i++){
+    table2[i]=NULL;
+  }
+  for(int i=0; i<size;i++){
+    if(table[i]!=NULL){
+      
+      if(table[i]->next!=NULL){
+	
+	if(table[i]->next->next!=NULL){
+	}
+      }
+    }
+    }
 }
+void hash(node* table[], int &size, char ifname[20], char ilname[20], int iid, float igpa){//this function should be nearly identical to add, but is necessary for hash from table and rehash
+  //int size = *(&table + 1) - table;
+  Student* s = new Student();
+  strcpy(s->fname, ifname);
+  strcpy(s->lname, ilname);
+  s->id=iid;
+  s->gpa=igpa;
+  node* n = new node();
+  n->value=s;
+  if(table[iid%size]==NULL){
+    table[iid%size]=n;
+  }else if(table[iid%size]->next==NULL){
+    node* t=table[iid%size];
+    n->next=t;
+    table[iid%size]=n;
+  }else if(table[iid%size]->next->next==NULL){
+    node* t=table[iid%size];
+    n->next=t;
+    table[iid%size]=n;
+  }else{
+    //all spots filled, rehash
+  }
+}
+
