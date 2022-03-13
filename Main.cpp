@@ -15,13 +15,23 @@ void add(node* table[]);
 //void hashf(node* table[], node* n);
 void print(node* table[]);
 int main(){
+  bool constant=true;
   int size = 100;
   node* table[size];
   for(int i=0; i<size;i++){
     table[i]=NULL;
   }
-  add(table);
-  print(table);
+  char input[10];
+  while(constant){
+    cout<<"add or print?: ";
+    cin.get(input,10);
+    cin.get();
+    if(strcmp(input,"add")==0){//add
+      add(table);
+    }else if(strcmp(input,"print")==0){//print
+      print(table);
+    }
+  }
   return 0;
 }
 void add(node* table[]){//creates a student node and passes it into hash
@@ -65,14 +75,18 @@ void print(node* table[]){
   int id3;
   cout<<"id to be printed: ";
   cin>>id3;
-  if(table[id3%size]!=NULL){//location of hash table corresponding to id has  node(s)
+  if(id3<=size){
+    cout<<"this id won't work, it is too small";
+  }else if(table[id3%size]!=NULL){//location of hash table corresponding to id has  node(s)
+    //I'm running into problem when there is a same location but not id, because my if statements are checking for value/id
+    cout<<"__";
     if(table[id3%size]->value->id==id3){
       cout<<table[id3%size]->value->fname
       <<", "<<table[id3%size]->value->lname
       <<", "<<table[id3%size]->value->id
       <<", "<<table[id3%size]->value->gpa;
     }else if(table[id3%size]->next->value->id==id3){
-      cout<<table[id3%size]->value->fname
+      cout<<table[id3%size]->next->value->fname
       <<", "<<table[id3%size]->next->value->lname
       <<", "<<table[id3%size]->next->value->id
       <<", "<<table[id3%size]->next->value->gpa;
@@ -81,8 +95,12 @@ void print(node* table[]){
       <<", "<<table[id3%size]->next->next->value->lname
       <<", "<<table[id3%size]->next->next->value->id
       <<", "<<table[id3%size]->next->next->value->gpa;
+    }else{
+      cout<<"no match found(1)";
     }
   }else{
-    cout<<"no match found";
+    cout<<"no match found(2)";
   }
+  cout<<endl;
+  cin.ignore(100, '\n');
 }
