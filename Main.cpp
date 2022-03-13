@@ -13,7 +13,9 @@ struct node{//Linked List node to go in the hash table so that multipple student
 };
 void add(node* table[]);
 //void hashf(node* table[], node* n);
+void test(node* table[]);
 void print(node* table[]);
+void rehash(node* table[]);
 int main(){
   bool constant=true;
   int size = 100;
@@ -23,13 +25,17 @@ int main(){
   }
   char input[10];
   while(constant){
-    cout<<"add or print?: ";
+    cout<<"add, print, test, or quit?: ";
     cin.get(input,10);
     cin.get();
     if(strcmp(input,"add")==0){//add
       add(table);
+    }else if(strcmp(input,"test")==0){//search
+      test(table);
     }else if(strcmp(input,"print")==0){//print
       print(table);
+    }else if(strcmp(input,"quit")==0){//quit
+      break;
     }
   }
   return 0;
@@ -42,7 +48,7 @@ void add(node* table[]){//creates a student node and passes it into hash
   cout<<"last name: ";
   cin.get(s->lname,10);
   cin.get();
-  cout<<"id: ";
+  cout<<"id (must be at least 4 digits): ";//id needs to be longer than size
   cin>>s->id;
   cout<<"gpa: ";
   cin>>s->gpa;
@@ -70,7 +76,7 @@ void add(node* table[]){//creates a student node and passes it into hash
   }
   cout<<endl;
 }
-void print(node* table[]){
+void test(node* table[]){
   int size=100;
   int id3;
   cout<<"id to be printed: ";
@@ -79,7 +85,7 @@ void print(node* table[]){
     cout<<"this id won't work, it is too small";
   }else if(table[id3%size]!=NULL){//location of hash table corresponding to id has  node(s)
     //I'm running into problem when there is a same location but not id, because my if statements are checking for value/id
-    cout<<"__";
+    //check if the next is null first
     if(table[id3%size]->value->id==id3){
       cout<<table[id3%size]->value->fname
       <<", "<<table[id3%size]->value->lname
@@ -103,4 +109,29 @@ void print(node* table[]){
   }
   cout<<endl;
   cin.ignore(100, '\n');
+}
+void print(node* table[]){
+  int size=100;
+  for(int i=0; i<size;i++){
+    if(table[i]!=NULL){
+     cout<<table[i]->value->fname
+      <<", "<<table[i]->value->lname
+      <<", "<<table[i]->value->id
+      <<", "<<table[i]->value->gpa<<endl;
+      if(table[i]->next!=NULL){
+	cout<<table[i]->next->value->fname
+	<<", "<<table[i]->next->value->lname
+	<<", "<<table[i]->next->value->id
+        <<", "<<table[i]->next->value->gpa<<endl;
+	if(table[i]->next->next!=NULL){
+	  cout<<table[i]->next->next->value->fname
+	  <<", "<<table[i]->next->next->value->lname
+	  <<", "<<table[i]->next->next->value->id
+	  <<", "<<table[i]->next->next->value->gpa<<endl;
+	}
+      }
+    }
+  }
+}
+void rehash(node* table[]){
 }
