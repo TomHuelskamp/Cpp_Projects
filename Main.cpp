@@ -1,5 +1,8 @@
+//add input
+//fix rehash: seg fault, and need a new hash function
 #include <cstring>
 #include <iostream>
+#include <fstream>
 using namespace std;
 struct Student{//struct with all the information about student
   char fname[20];
@@ -16,8 +19,9 @@ void add(node* table[], int &size);
 void test(node* table[], int &size);
 void print(node* table[], int &size);
 void rehash(node* table[], int &size);
-void hash(node* table[], int &size, char ifname[20], char ilname[20], int iid, float igpa);
-
+void hash1(node* table[], int &size, char ifname[20], char ilname[20], int iid, float igpa);
+void delete1(node* table[], int &size);
+void generate(node* table[], int &size, int &counter);
 int main(){
   bool constant=true;
   int size = 100;
@@ -26,8 +30,10 @@ int main(){
     table[i]=NULL;
   }
   char input[10];
+  int counter=100051;
   while(constant){
-    cout<<"add, print, test, or quit?: ";
+    srand(time(NULL));
+    cout<<"add, print, delete, generate, or quit?: ";
     cin.get(input,10);
     cin.get();
     if(strcmp(input,"add")==0){//add
@@ -38,10 +44,21 @@ int main(){
       print(table, size);
     }else if(strcmp(input,"quit")==0){//quit
       break;
-    }else if(strcmp(input,"rehash")==0){//rehash
+    }else if(strcmp(input,"rehash")==0){
       rehash(table, size);
+    }else if(strcmp(input,"delete")==0){//delete
+      delete1(table,size);
+    }else if(strcmp(input,"generate")==0){
+      cout<<"how many students do you want to generate?: ";
+      int manytimes=0;
+      cin>>manytimes;
+      cin.get();
+      while(manytimes>0){
+	generate(table,size,counter);
+	manytimes--;
+      }
     }
-    //hash
+    cout<<endl;
   }
   return 0;
 }
@@ -77,7 +94,8 @@ void add(node* table[], int &size){//creates a student node and passes it into h
   }else{//no room in hash table
     cout<<"no room in the hash table, rehashing...";
     //rehash
-    
+    rehash(table, size);
+    cout<<endl<<"the table has been rehashed, run add again to add this student"<<endl;
   }
   cout<<endl;
 }
@@ -91,6 +109,7 @@ void test(node* table[], int &size){
   }else if(table[id3%size]!=NULL){//location of hash table corresponding to id has  node(s)
     //I'm running into problem when there is a same location but not id, because my if statements are checking for value/id
     //check if the next is null first
+    //problem fixed in the delete function
     if(table[id3%size]->value->id==id3){
       cout<<table[id3%size]->value->fname
       <<", "<<table[id3%size]->value->lname
@@ -116,7 +135,6 @@ void test(node* table[], int &size){
   cin.ignore(100, '\n');
 }
 void print(node* table[], int &size){
-  // int size =100;
   for(int i=0; i<size;i++){
     if(table[i]!=NULL){
      cout<<table[i]->value->fname
@@ -136,28 +154,49 @@ void print(node* table[], int &size){
 	}
       }
     }
+    cout<<" "<<i<<endl;//seg faults at the old end of length
   }
 }
 void rehash(node* table[], int &size){
-  // int size =100;
   int size2=size*2;
   node* table2[size2];
-  for(int i=0; i<size2;i++){
+  for(int i=0; i<=size2;i++){
     table2[i]=NULL;
   }
   for(int i=0; i<size;i++){
     if(table[i]!=NULL){
-      
+      hash1(table2, size2
+	   ,table[i]->value->fname
+	   ,table[i]->value->lname
+	   ,table[i]->value->id
+	   ,table[i]->value->gpa);
+      cout<<"r1";
       if(table[i]->next!=NULL){
-	
+	hash1(table2, size2
+	     ,table[i]->next->value->fname
+	     ,table[i]->next->value->lname
+	     ,table[i]->next->value->id
+	     ,table[i]->next->value->gpa);
+	cout<<"r2";
 	if(table[i]->next->next!=NULL){
+	  hash1(table2, size2
+	       ,table[i]->next->next->value->fname
+	       ,table[i]->next->next->value->lname
+	       ,table[i]->next->next->value->id
+	       ,table[i]->next->next->value->gpa);
+	  cout<<"r3";
 	}
       }
     }
-    }
+   }
+  //problem here is reallocating arrays
+  //copy(begin(table),end(table2),begin(table));
+  delete[] *table;
+  //table = table2;
+  table=new node*[size2];
+  size=size2;
 }
-void hash(node* table[], int &size, char ifname[20], char ilname[20], int iid, float igpa){//this function should be nearly identical to add, but is necessary for hash from table and rehash
-  //int size = *(&table + 1) - table;
+void hash1(node* table[], int &size, char ifname[20], char ilname[20], int iid, float igpa){//this function should be nearly identical to add, but is necessary for hash from table and rehash
   Student* s = new Student();
   strcpy(s->fname, ifname);
   strcpy(s->lname, ilname);
@@ -176,7 +215,79 @@ void hash(node* table[], int &size, char ifname[20], char ilname[20], int iid, f
     n->next=t;
     table[iid%size]=n;
   }else{
+    rehash(table, size);
     //all spots filled, rehash
   }
 }
+void delete1(node* table[], int &size){//test, but deletes not prints
+  int id3;
+  cout<<"id to be deleted: ";
+  cin>>id3;
+  if(id3<=size){
+    cout<<"this id won't work, it is too small";
+  }
+  else if(table[id3%size]!=NULL){//location of hash table corresponding to id has  node(s)
+    if(table[id3%size]->value->id==id3){
+      if(table[id3%size]->next!=NULL){//rm node is the first in a list
+	node* temp=table[id3%size]->next;
+	table[id3%size]=temp;
+	cout<<"deleted"<<endl;
+      }else{//rm node is the only
+	table[id3%size]=NULL;
+	cout<<"deleted"<<endl;
+      }
+    }else if(table[id3%size]->next!=NULL){
+      if(table[id3%size]->next->value->id==id3){
+	if(table[id3%size]->next->next!=NULL){//node after rm node
+	  node* temp=table[id3%size]->next->next;
+	  table[id3%size]->next=temp;
+	  cout<<"deleted"<<endl;
+	}else{//no node after rm node
+	  table[id3%size]->next=NULL;
+	  cout<<"deleted"<<endl;
+	}
+      }
+    }else if(table[id3%size]->next->next!=NULL){
+      if(table[id3%size]->next->next->value->id==id3){
+	table[id3%size]->next->next=NULL;
+	cout<<"deleted"<<endl;
+      }
+    }else{
+      cout<<"no match found(1)"<<endl;
+    }
+  }
+  else{
+    cout<<"no match found(2)"<<endl;
+  }
+  cin.ignore(100, '\n');
+}
+void generate(node* table[], int &size, int &counter){
+  ifstream fnames;
+  fnames.open("fnames.txt");
+  char fnamei[20];
+  int line = 0;
+  int rand1=(rand()%101);
+  while(line<rand1){
+    if(fnames.is_open()){
+      fnames>>fnamei;
+    }
+    line++;
+  }
+  fnames.close();
 
+  ifstream lnames;
+  lnames.open("lnames.txt");
+  char lnamei[20];
+  int line2 = 0;
+  int rand2 =(rand()%101) ;
+  while(line2<rand2){
+    if(lnames.is_open()){
+      lnames>>lnamei;
+    }
+    line2++;
+  }
+  lnames.close();
+  int rand3=(rand()%5);
+  hash1(table,size,fnamei,lnamei,counter,rand3);
+  counter++;
+}
