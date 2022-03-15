@@ -3,52 +3,53 @@
 #include <cstring>
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 using namespace std;
 struct Student{//struct with all the information about student
   char fname[20];
   char lname[20];
   int id;
-  float gpa;
+  double gpa;
 };
 struct node{//Linked List node to go in the hash table so that multipple students can be in one spot
   Student* value;
   node* next;
 };
-void add(node* *table, int &size);
+void add(node** &table, int &size);
 //void hashf(node* table[], node* n);
-void test(node* *table, int &size);
-void print(node* *table, int &size);
-void rehash(node* *table, int &size);
-void hash1(node* *table, int &size, char ifname[20], char ilname[20], int iid, float igpa, bool callFromGenerate);
-void delete1(node* *table, int &size);
-void generate(node* *table, int &size, int &counter);
+void test(node** &table, int &size);
+void print(node** &table, int &size);
+void rehash(node** &table, int &size);
+void hash1(node** &table, int &size, char ifname[20], char ilname[20], int iid, double igpa, bool callFromGenerate);
+void delete1(node** &table, int &size);
+void generate(node** &table, int &size, int &counter);
 int main(){
   bool constant=true;
-  int size = 5;
-  node* table[size];
+  int size = 101;
+  node** table = new node*[size];
   for(int i=0; i<size;i++){
     table[i]=NULL;
   }
-  char input[10];
   int counter=100051;
   while(constant){
+    char input1[10];
     srand(time(NULL));
     cout<<"add, print, delete, generate, or quit?: ";
-    cin.get(input,10);
+    cin.get(input1,10);
     cin.get();
-    if(strcmp(input,"add")==0){//add
+    if(strcmp(input1,"add")==0){//add
       add(table, size);
-    }else if(strcmp(input,"test")==0){//search
+    }else if(strcmp(input1,"test")==0){//search
       test(table, size);
-    }else if(strcmp(input,"print")==0){//print
+    }else if(strcmp(input1,"print")==0){//print
       print(table, size);
-    }else if(strcmp(input,"quit")==0){//quit
+    }else if(strcmp(input1,"quit")==0){//quit
       break;
-    }else if(strcmp(input,"rehash")==0){
+    }else if(strcmp(input1,"rehash")==0){
       rehash(table, size);
-    }else if(strcmp(input,"delete")==0){//delete
+    }else if(strcmp(input1,"delete")==0){//delete
       delete1(table,size);
-    }else if(strcmp(input,"generate")==0){
+    }else if(strcmp(input1,"generate")==0){
       cout<<"how many students do you want to generate?: ";
       int manytimes=0;
       cin>>manytimes;
@@ -62,7 +63,7 @@ int main(){
   }
   return 0;
 }
-void add(node* *table, int &size){//creates a student node and passes it into hash
+void add(node** &table, int &size){//creates a student node and passes it into hash
   Student* s = new Student();//create new student
   cout<<"first name: ";
   cin.get(s->fname,20);
@@ -99,7 +100,7 @@ void add(node* *table, int &size){//creates a student node and passes it into ha
   }
   cout<<endl;
 }
-void test(node* *table, int &size){
+void test(node** &table, int &size){
   // int size=100;
   int id3;
   cout<<"id to be printed: ";
@@ -134,32 +135,31 @@ void test(node* *table, int &size){
   cout<<endl;
   cin.ignore(100, '\n');
 }
-void print(node* *table, int &size){
+void print(node** &table, int &size){
   for(int i=0; i<size;i++){
     if(table[i]!=NULL){
      cout<<table[i]->value->fname
       <<", "<<table[i]->value->lname
       <<", "<<table[i]->value->id
-      <<", "<<table[i]->value->gpa<<endl;
+	 <<", "<<setprecision(2)<<table[i]->value->gpa<<endl;
       if(table[i]->next!=NULL){
 	cout<<table[i]->next->value->fname
 	<<", "<<table[i]->next->value->lname
 	<<", "<<table[i]->next->value->id
-        <<", "<<table[i]->next->value->gpa<<endl;
+	    <<", "<<setprecision(2)<<table[i]->next->value->gpa<<endl;
 	if(table[i]->next->next!=NULL){
 	  cout<<table[i]->next->next->value->fname
 	  <<", "<<table[i]->next->next->value->lname
 	  <<", "<<table[i]->next->next->value->id
-	  <<", "<<table[i]->next->next->value->gpa<<endl;
+	      <<", "<<setprecision(3)<<table[i]->next->next->value->gpa<<endl;
 	}
       }
     }
-    cout<<" "<<i<<endl;//seg faults at the old end of length
   }
 }
-void rehash(node* *table, int &size){
+void rehash(node** &table, int &size){
   int size2=size*2;
-  node* table2[size2];
+  node** table2 = new node*[size2];
   for(int i=0; i<=size2;i++){
     table2[i]=NULL;
   }
@@ -170,35 +170,26 @@ void rehash(node* *table, int &size){
 	   ,table[i]->value->lname
 	   ,table[i]->value->id
 	    ,table[i]->value->gpa,false);
-      cout<<"r1";
       if(table[i]->next!=NULL){
 	hash1(table2, size2
 	     ,table[i]->next->value->fname
 	     ,table[i]->next->value->lname
 	     ,table[i]->next->value->id
 	      ,table[i]->next->value->gpa,false);
-	cout<<"r2";
 	if(table[i]->next->next!=NULL){
 	  hash1(table2, size2
 	       ,table[i]->next->next->value->fname
 	       ,table[i]->next->next->value->lname
 	       ,table[i]->next->next->value->id
 		,table[i]->next->next->value->gpa,false);
-	  cout<<"r3";
 	}
       }
     }
    }
-  //reassigns first 100, will print first 10
   table = table2;
   size = size2;
 }
-void hash1(node* *table, int &size, char ifname[20], char ilname[20], int iid, float igpa,bool callFromGenerate){//this function should be nearly identical to add, but is necessary for hash from table and rehash
-  if(callFromGenerate){
-    cout<<endl<<"cfromGenerate"<<endl;
-  }else{
-    cout<<endl<<"cfromRehash"<<endl;
-  }
+void hash1(node** &table, int &size, char ifname[20], char ilname[20], int iid, double igpa,bool callFromGenerate){//this function should be nearly identical to add, but is necessary for hash from table and rehash
   Student* s = new Student();
   strcpy(s->fname, ifname);
   strcpy(s->lname, ilname);
@@ -217,12 +208,10 @@ void hash1(node* *table, int &size, char ifname[20], char ilname[20], int iid, f
     n->next=t;
     table[iid%size]=n;
   }else if(callFromGenerate==true){
-    cout<<endl<<"about to rehash"<<endl;
     rehash(table, size);
-    //all spots filled, rehash
   }
 }
-void delete1(node* *table, int &size){//test, but deletes not prints
+void delete1(node** &table, int &size){//test, but deletes not prints
   int id3;
   cout<<"id to be deleted: ";
   cin>>id3;
@@ -264,7 +253,7 @@ void delete1(node* *table, int &size){//test, but deletes not prints
   }
   cin.ignore(100, '\n');
 }
-void generate(node* *table, int &size, int &counter){
+void generate(node** &table, int &size, int &counter){
   ifstream fnames;
   fnames.open("fnames.txt");
   char fnamei[20];
@@ -290,7 +279,7 @@ void generate(node* *table, int &size, int &counter){
     line2++;
   }
   lnames.close();
-  int rand3=(rand()%5);
+  double rand3=(rand()%5);
   hash1(table,size,fnamei,lnamei,counter,rand3,true);
   counter++;
 }
