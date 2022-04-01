@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstring>
 #include <cmath>
+#include <fstream>
+#include <iomanip>
 using namespace std;
 void add(int* &MAXheap,int input,int i);
 void add1(int* &MAXheap,int input);
@@ -14,14 +16,44 @@ int main(){
   bool forever=true;
   while(forever){
     char name[100];
+    cout<<"'manual' entry, 'file' entry, 'clear' heap, or 'display' tree?: ";
+    ;
+    cin.get(name,100);
+    cin.get();
     if(strcmp(name,"manual")==0){//enter by number
-      cout<<"Enter a number manually: ";
+      cout<<"enter a number: ";
       int input;
       cin>>input;
+      cin.get();
       add1(MAXheap,input);
       test(MAXheap);
-    }else{//enter by file
-
+    }else if(strcmp(name,"file")==0){
+      cout<<"available files: ";
+      cout<<"file1"<<endl;
+      cout<<"enter a file name: ";
+      char fileName[100];
+      cin.get(fileName, 100);
+      cin.get();
+      if(strcmp(fileName,"file1")==0){
+	//cout<<"adding file1 to the tree..."<<endl;
+	string numberString;
+	int input;
+	ifstream file1;
+	file1.open("file1.txt");
+	while(file1){
+	  file1>>numberString;
+	  input=stoi(numberString);
+	  add1(MAXheap,input);
+	}
+	file1.close();
+      }else{
+	cout<<"file not found"<<endl;
+      }
+    }else if(strcmp(name,"clear")==0){
+    }else if(strcmp(name,"display")==0){
+    }else{
+      cout<<"invalid input"<<endl;
+      
     }
   }
   return 0;
@@ -58,13 +90,12 @@ void add(int* &MAXheap,int input,int i){
   }
 }
 void test(int* MAXheap){
-  /**for(int i=0; i<50;i++){
+  for(int i=0; i<100;i++){
     if(MAXheap[i]!=0){
       cout<<i<<". "<<MAXheap[i]<<endl;
     }
     }
   cout<<endl;
-  **/
   
 }
 void add1(int* &MAXheap, int input){
