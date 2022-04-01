@@ -7,6 +7,7 @@ using namespace std;
 void add(int* &MAXheap,int input,int i);
 void add1(int* &MAXheap,int input);
 void test(int* MAXheap);
+void clear(int* &MAXheap);
 int main(){
   int* MAXheap = new int[100];
   MAXheap[1]=0;//array is 'empty' when the highest value is 0
@@ -35,7 +36,6 @@ int main(){
       cin.get(fileName, 100);
       cin.get();
       if(strcmp(fileName,"file1")==0){
-	//cout<<"adding file1 to the tree..."<<endl;
 	string numberString;
 	int input;
 	ifstream file1;
@@ -50,6 +50,7 @@ int main(){
 	cout<<"file not found"<<endl;
       }
     }else if(strcmp(name,"clear")==0){
+      clear(MAXheap);
     }else if(strcmp(name,"display")==0){
     }else{
       cout<<"invalid input"<<endl;
@@ -58,6 +59,7 @@ int main(){
   }
   return 0;
 }
+/**
 void add(int* &MAXheap,int input,int i){
   if(MAXheap[i]==0){//index is empty, place int at index
     MAXheap[i]=input;
@@ -88,7 +90,7 @@ void add(int* &MAXheap,int input,int i){
       add(MAXheap,input,i*2+1);
     }
   }
-}
+}**/
 void test(int* MAXheap){
   for(int i=0; i<100;i++){
     if(MAXheap[i]!=0){
@@ -96,7 +98,6 @@ void test(int* MAXheap){
     }
     }
   cout<<endl;
-  
 }
 void add1(int* &MAXheap, int input){
   for(int i=1; i<100;i++){
@@ -107,4 +108,18 @@ void add1(int* &MAXheap, int input){
       break;
     }
   }
+}
+void clear(int* &MAXheap){
+  while(MAXheap[1]!=0){
+    int i=1;
+    cout<<MAXheap[1];
+    if(MAXheap[2]!=0){
+      cout<<", ";
+    }
+    while(MAXheap[i]!=0){
+     MAXheap[i]=MAXheap[i+1];
+    i++;
+    }
+  }
+  cout<<endl;
 }
