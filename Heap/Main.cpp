@@ -3,11 +3,13 @@
 #include <cmath>
 #include <fstream>
 #include <iomanip>
+#include <math.h>
 using namespace std;
 void add(int* &MAXheap,int input,int i);
 void add1(int* &MAXheap,int input);
 void test(int* MAXheap);
 void clear(int* &MAXheap);
+void display(int* MAXheap,int i);
 int main(){
   int* MAXheap = new int[100];
   MAXheap[1]=0;//array is 'empty' when the highest value is 0
@@ -52,6 +54,7 @@ int main(){
     }else if(strcmp(name,"clear")==0){
       clear(MAXheap);
     }else if(strcmp(name,"display")==0){
+      display(MAXheap,1);
     }else{
       cout<<"invalid input"<<endl;
       
@@ -122,4 +125,17 @@ void clear(int* &MAXheap){
     }
   }
   cout<<endl;
+}
+void display(int* MAXheap,int i){
+  if(i*2<=100 && MAXheap[i*2]!=0){
+    display(MAXheap,(i*2));
+  }
+  int space=(int)floor((log(i)/log(2)));
+  for(int b=0;b<space;b++){
+    cout<<"      ";
+  }
+  cout<<MAXheap[i]<<endl;
+  if(i*2+1<=100 && MAXheap[i*2+1]!=0){
+    display(MAXheap,(i*2+1));
+  }
 }
