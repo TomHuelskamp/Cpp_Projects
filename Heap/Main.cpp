@@ -1,3 +1,6 @@
+//Thomas Huelskamp
+//April 6, 2022
+//This project stores numbers from user input or file into an array and displays them as a binary tree
 #include <iostream>
 #include <cstring>
 #include <cmath>
@@ -5,15 +8,14 @@
 #include <iomanip>
 #include <math.h>
 using namespace std;
-void add(int* &MAXheap,int input,int i);
-void add1(int* &MAXheap,int input);
-void test(int* MAXheap);
-void clear(int* &MAXheap);
-void display(int* MAXheap,int i);
+void add(int* &MAXheap,int input,int i);//this function isn't used in this project, it adds integers to the array using traversal
+void add1(int* &MAXheap,int input);//adds integers to array
+void test(int* MAXheap);//used for testing, prints array
+void clear(int* &MAXheap);//clears array and prints the values from greatest to least
+void display(int* MAXheap,int i);//displays array as a tree
 int main(){
   int* MAXheap = new int[100];
-  MAXheap[1]=0;//array is 'empty' when the highest value is 0
-  for(int i=0; i<100;i++){
+  for(int i=0; i<100;i++){//fills an array with 'empty' zeroes
     MAXheap[i]=0;
   }
   bool forever=true;
@@ -29,20 +31,19 @@ int main(){
       cin>>input;
       cin.get();
       add1(MAXheap,input);
-      test(MAXheap);
-    }else if(strcmp(name,"file")==0){
+    }else if(strcmp(name,"file")==0){//enter by file
       cout<<"available files: ";
       cout<<"file1"<<endl;
       cout<<"enter a file name: ";
       char fileName[100];
       cin.get(fileName, 100);
       cin.get();
-      if(strcmp(fileName,"file1")==0){
+      if(strcmp(fileName,"file1")==0){//file1
 	string numberString;
 	int input;
 	ifstream file1;
 	file1.open("file1.txt");
-	while(file1){
+	while(file1){//read in numbers from file
 	  file1>>numberString;
 	  input=stoi(numberString);
 	  add1(MAXheap,input);
@@ -51,10 +52,12 @@ int main(){
       }else{
 	cout<<"file not found"<<endl;
       }
-    }else if(strcmp(name,"clear")==0){
+    }else if(strcmp(name,"clear")==0){//clear
       clear(MAXheap);
-    }else if(strcmp(name,"display")==0){
+    }else if(strcmp(name,"display")==0){//display tree
       display(MAXheap,1);
+    }else if(strcmp(name,"quit")==0){//quit
+      break;
     }else{
       cout<<"invalid input"<<endl;
       
@@ -94,48 +97,49 @@ void add(int* &MAXheap,int input,int i){
     }
   }
 }**/
-void test(int* MAXheap){
-  for(int i=0; i<100;i++){
+void test(int* MAXheap){//prints array vertically in order of  descending values (used for testing)
+  for(int i=0; i<100;i++){//goes through array
     if(MAXheap[i]!=0){
       cout<<i<<". "<<MAXheap[i]<<endl;
     }
     }
   cout<<endl;
 }
-void add1(int* &MAXheap, int input){
+void add1(int* &MAXheap, int input){//used for adding values to the array
   for(int i=1; i<100;i++){
-    if(input>MAXheap[i]){
+    if(input>MAXheap[i]){//replaces lesser value with input
       int a=MAXheap[i];
       MAXheap[i]=input;
-      add1(MAXheap,a);
+      add1(MAXheap,a);//recalls with the integer that was replaced
       break;
     }
   }
 }
-void clear(int* &MAXheap){
-  while(MAXheap[1]!=0){
+void clear(int* &MAXheap){//clears and prints the array
+  while(MAXheap[1]!=0){//repeats function until the array is empty
     int i=1;
     cout<<MAXheap[1];
-    if(MAXheap[2]!=0){
+    if(MAXheap[2]!=0){//adds commas
       cout<<", ";
     }
     while(MAXheap[i]!=0){
-     MAXheap[i]=MAXheap[i+1];
-    i++;
+      MAXheap[i]=MAXheap[i+1];//gets rid of 'head' by replacing everything with the next value, 'tail' gets replaced with a zero so the whole array is shifted over
+      i++;
     }
   }
-  cout<<endl;
+  cout<<endl;//prints value
 }
-void display(int* MAXheap,int i){
-  if(i*2<=100 && MAXheap[i*2]!=0){
+void display(int* MAXheap,int i){//displays the tree
+  //Kabir V helped me with this function, the most important thing was using logarithms to find position of each integer
+  if(i*2<=100 && MAXheap[i*2]!=0){//traverses left
     display(MAXheap,(i*2));
   }
-  int space=(int)floor((log(i)/log(2)));
-  for(int b=0;b<space;b++){
+  int space=(int)floor((log(i)/log(2)));//uses logarithms to find the amount of spaces before each integer
+  for(int b=0;b<space;b++){//prints spaces
     cout<<"      ";
   }
   cout<<MAXheap[i]<<endl;
-  if(i*2+1<=100 && MAXheap[i*2+1]!=0){
+  if(i*2+1<=100 && MAXheap[i*2+1]!=0){//traverses right
     display(MAXheap,(i*2+1));
   }
 }
