@@ -12,17 +12,19 @@ struct node{
   node* right;//greater
 };
 void add(node* &root, int num);
-void print(node* &root);
+void print(node* &root, int space);
+bool search(node* root, int num);
 int main(){
   node* root=new node();
-  root->left=NULL;
-  root->right=NULL;
-  root->data=0;
-
+  //root->left=NULL;
+  //root->right=NULL;
+  //root->data=0;
+  root=NULL;
   bool loop=true;
   while(loop){
     char input1[20];
-    cout<<"'add', 'print', 'remove', or 'quit'?: ";
+    //cout<<root->data;
+    cout<<"'add', 'print', 'search', 'remove', or 'quit'?: ";
     cin.get(input1,20);
     cin.get();
     if(strcmp(input1,"add")==0){
@@ -58,7 +60,17 @@ int main(){
 	}
       }
     }else if(strcmp(input1,"print")==0){
-      print(root);
+      print(root, 0);
+    }else if(strcmp(input1,"search")==0){
+      int num;
+      cout<<"enter a number to be searched for: ";
+      cin>>num;
+      cin.get();
+      if(search(root,num)){
+	cout<<num<<" is in the tree"<<endl;
+      }else{
+	cout<<num<<" is not in the tree"<<endl;
+      }
     }else if(strcmp(input1,"remove")==0){
     }else if(strcmp(input1,"quit")==0){
       break;
@@ -75,6 +87,8 @@ void add(node* &root, int num){
     root->data=num;
     root->left=NULL;
     root->right=NULL;
+    //}else if(root->data==0){
+    //root->data=num;
   }else if(num<=root->data){//less
     add(root->left, num);
   }else{//more
@@ -82,3 +96,31 @@ void add(node* &root, int num){
   }
 }
 
+void print(node* &root, int space){
+  if(!root){
+    return;
+  }
+  space += 3;
+  print(root->right, space);
+  cout<<endl;
+  for(int i=3; i<space;i++){
+    cout<<" ";
+  }
+  cout<<root->data<<"\n";
+  print(root->left, space);
+}
+bool search(node* root, int num){
+  int i=0;
+  while(i==0){
+    if(!root){
+      return false;
+    }else if(root->data==num){
+      return true;
+    }else if(num<root->data){
+      root=root->left;
+    }else{
+      root=root->right;
+    }
+  }
+  return false;
+}
