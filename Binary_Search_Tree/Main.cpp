@@ -7,24 +7,21 @@
 using namespace std;
 struct node{
   int data;
-  node* parent;
   node* left;//less
   node* right;//greater
+  node* parent;
 };
-void add(node* &root, int num);
+void add(node* &root, int num, node* &p);
 void print(node* &root, int space);
 bool search(node* root, int num);
 void remove(node* &root, int num);
+void remove2(node* &root, int num);
 int main(){
   node* root=new node();
-  //root->left=NULL;
-  //root->right=NULL;
-  //root->data=0;
   root=NULL;
   bool loop=true;
   while(loop){
     char input1[20];
-    //cout<<root->data;
     cout<<"'add', 'print', 'search', 'remove', or 'quit'?: ";
     cin.get(input1,20);
     cin.get();
@@ -38,7 +35,7 @@ int main(){
 	int num;
 	cin>>num;
 	cin.get();
-	add(root, num);
+	add(root, num, root);
       }
       else if(strcmp(input2,"file")==0){
 	cout<<"available files: ";
@@ -55,7 +52,7 @@ int main(){
 	  while(file1){
 	    file1>>numberString;
 	    num=stoi(numberString);
-	    add(root,num);
+	    add(root,num,root);
 	  }
 	  file1.close();
 	}
@@ -91,21 +88,19 @@ int main(){
   }
   return 0;
 }
-void add(node* &root, int num){
+void add(node* &root, int num, node* &p){
   if(!root){//add
     root = new node();
     root->data=num;
     root->left=NULL;
     root->right=NULL;
-    //}else if(root->data==0){
-    //root->data=num;
+    root->parent=p;
   }else if(num<=root->data){//less
-    add(root->left, num);
-  }else{//more
-    add(root->right,num);
+    add(root->left, num,root);
+  }else{
+    add(root->right,num,root);
   }
 }
-
 void print(node* &root, int space){
   if(!root){
     return;
@@ -135,5 +130,42 @@ bool search(node* root, int num){
   return false;
 }
 void remove(node* &root, int num){
-
+  int i=0;
+  while(i==0){
+    if(root->data==num){
+      i=1;
+    }else if(root->data>num){
+      root=root->left;
+    }else{
+      root=root->right;
+    }
+  }
+  if(!(root->left)&&!(root->right)){
+    root=root->parent;
+    root->left=NULL;
+    root->right=NULL;
+  }else if(!(root->right)){//only a left
+    if(root<root->parent){//root was less
+      root=root->parent;
+      root->left=root->left->left;
+    }else{//root was greater
+      root=root->parent;
+      root->right=root->right->left;
+    }
+  }else if(!(root->left)){//only a right child
+    if(root<root->parent){
+      root=root->parent;
+      root->left=root->left->right;
+    }else{
+      root=root->parent;
+      root->right=root->right->right;
+    }
+  }else{
+    remove2(root,num);
+  }
+  while(!(root->parent)){
+    root=root->parent;
+  }
+}
+void remove2(node* &root, int num){
 }
