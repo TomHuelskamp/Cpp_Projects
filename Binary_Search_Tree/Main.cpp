@@ -14,6 +14,7 @@ struct node{
 void add(node* &root, int num);
 void print(node* &root, int space);
 bool search(node* root, int num);
+void remove(node* &root, int num);
 int main(){
   node* root=new node();
   //root->left=NULL;
@@ -72,6 +73,15 @@ int main(){
 	cout<<num<<" is not in the tree"<<endl;
       }
     }else if(strcmp(input1,"remove")==0){
+      int num;
+      cout<<"enter a number to be removed: ";
+      cin>>num;
+      cin.get();
+      if(search(root,num)){
+	remove(root, num);
+      }else{
+	cout<<num<<" cannot be removed because it wasn't found in the tree"<<endl;
+      }
     }else if(strcmp(input1,"quit")==0){
       break;
     }else{
@@ -123,4 +133,7 @@ bool search(node* root, int num){
     }
   }
   return false;
+}
+void remove(node* &root, int num){
+
 }
