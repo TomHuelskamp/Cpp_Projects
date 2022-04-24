@@ -131,37 +131,91 @@ bool search(node* root, int num){
   return false;
 }
 void remove(node* &root, int num){
-  cout<<"test2"<<endl;
   node* counter = root;
   bool loop=true;
   int LR=0;
-  while(loop){
+  int rn=0;
+  while(loop){//problem when removing child of root
     if(counter->data==num){
-      cout<<"m"<<endl;
-      counter=counter->parent;
-      if(LR==1){
-	counter->left=NULL;
-      }else{
-	counter->right=NULL;
+      if(counter->left==NULL&&counter->right==NULL){//no children
+	cout<<"no children"<<endl;
+	counter=counter->parent;
+	if(LR==1){
+	  counter->left=NULL;
+	}else{
+	  counter->right=NULL;
+	}
+	loop=false;
+      }else if(!(counter->left)||!(counter->right)){//one child
+	cout<<"one child"<<endl;
+	node* n;
+	if(!(counter->right)){
+	  n=counter->left;
+	}else{
+	  n=counter->right;
+	}
+	counter=counter->parent;
+	if(LR==1){
+	  counter->left=n;
+	}else{
+	  counter->right=n;
+	}
+	loop=false;
+      }else{//two children
+	cout<<"two children"<<endl;
+	node* n = counter;
+	n=counter->left;
+	while(n->right!=NULL){
+	  cout<<"tick,"<<endl;
+	  n=n->right;
+	}
+	int store = counter->data;
+	counter->data=n->data;
+	n->data=store;
+	rn=store;
+	//remove(root,store);
+	//use 0 child removeal with parent
+	//find closes value
+	//replace the old switch values
+	//run remove again
+	loop=false;
       }
-      // while((counter->parent)){
-      //counter=counter->parent;
-      //cout<<"up"<<endl;
-      //}
-      loop=false;
     }else if(counter->data>num){
-      cout<<"l"<<endl;
       counter=counter->left;
       LR=1;
     }else{
-      cout<<"r"<<endl;
       counter=counter->right;
       LR=2;
     }
   }
-  cout<<"exit"<<endl;
-  //root=counter;
+  remove2(root,rn);
 }
  
 void remove2(node* &root, int num){
+  cout<<"remove2"<<endl;
+  if(num==0){
+    cout<<"1"<<endl;
+  }else{
+    node* counter = root;
+    bool loop=true;
+    int LR=0;
+    while(loop){//problem when removing child of root                          
+      if(counter->data==num){               
+        cout<<"no children"<<endl;
+        counter=counter->parent;
+        if(LR==1){
+          counter->left=NULL;
+        }else{
+          counter->right=NULL;
+        }
+        loop=false;
+      }else if(num<counter->data){
+	counter=counter->left;
+	LR=1;
+      }else{
+	counter=counter->right;
+	LR=2;
+      }
+    }
+  }
 }
