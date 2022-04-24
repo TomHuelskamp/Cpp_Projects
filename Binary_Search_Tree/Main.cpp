@@ -75,6 +75,7 @@ int main(){
       cin>>num;
       cin.get();
       if(search(root,num)){
+	cout<<"remove function called"<<endl;
 	remove(root, num);
       }else{
 	cout<<num<<" cannot be removed because it wasn't found in the tree"<<endl;
@@ -130,42 +131,37 @@ bool search(node* root, int num){
   return false;
 }
 void remove(node* &root, int num){
-  int i=0;
-  while(i==0){
-    if(root->data==num){
-      i=1;
-    }else if(root->data>num){
-      root=root->left;
+  cout<<"test2"<<endl;
+  node* counter = root;
+  bool loop=true;
+  int LR=0;
+  while(loop){
+    if(counter->data==num){
+      cout<<"m"<<endl;
+      counter=counter->parent;
+      if(LR==1){
+	counter->left=NULL;
+      }else{
+	counter->right=NULL;
+      }
+      // while((counter->parent)){
+      //counter=counter->parent;
+      //cout<<"up"<<endl;
+      //}
+      loop=false;
+    }else if(counter->data>num){
+      cout<<"l"<<endl;
+      counter=counter->left;
+      LR=1;
     }else{
-      root=root->right;
+      cout<<"r"<<endl;
+      counter=counter->right;
+      LR=2;
     }
   }
-  if(!(root->left)&&!(root->right)){
-    root=root->parent;
-    root->left=NULL;
-    root->right=NULL;
-  }else if(!(root->right)){//only a left
-    if(root<root->parent){//root was less
-      root=root->parent;
-      root->left=root->left->left;
-    }else{//root was greater
-      root=root->parent;
-      root->right=root->right->left;
-    }
-  }else if(!(root->left)){//only a right child
-    if(root<root->parent){
-      root=root->parent;
-      root->left=root->left->right;
-    }else{
-      root=root->parent;
-      root->right=root->right->right;
-    }
-  }else{
-    remove2(root,num);
-  }
-  while(!(root->parent)){
-    root=root->parent;
-  }
+  cout<<"exit"<<endl;
+  //root=counter;
 }
+ 
 void remove2(node* &root, int num){
 }
