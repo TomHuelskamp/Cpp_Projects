@@ -55,6 +55,7 @@ int main(){
 	    add(root,num,root);
 	  }
 	  file1.close();
+	  remove(root,num);
 	}
       }
     }else if(strcmp(input1,"print")==0){
@@ -75,7 +76,6 @@ int main(){
       cin>>num;
       cin.get();
       if(search(root,num)){
-	cout<<"remove function called"<<endl;
 	remove(root, num);
       }else{
 	cout<<num<<" cannot be removed because it wasn't found in the tree"<<endl;
@@ -135,9 +135,9 @@ void remove(node* &root, int num){
   bool loop=true;
   int LR=0;
   int rn=0;
-  while(loop){//problem when removing child of root
+  while(loop){
     if(counter->data==num){
-      if(counter->left==NULL&&counter->right==NULL){//no children
+      if(!(counter->left)&&!(counter->right)){
 	cout<<"no children"<<endl;
 	counter=counter->parent;
 	if(LR==1){
@@ -147,7 +147,6 @@ void remove(node* &root, int num){
 	}
 	loop=false;
       }else if(!(counter->left)||!(counter->right)){//one child
-	cout<<"one child"<<endl;
 	node* n;
 	if(!(counter->right)){
 	  n=counter->left;
@@ -162,22 +161,14 @@ void remove(node* &root, int num){
 	}
 	loop=false;
       }else{//two children
-	cout<<"two children"<<endl;
 	node* n = counter;
 	n=counter->left;
 	while(n->right!=NULL){
-	  cout<<"tick,"<<endl;
 	  n=n->right;
 	}
 	int store = counter->data;
 	counter->data=n->data;
-	n->data=store;
-	rn=store;
-	//remove(root,store);
-	//use 0 child removeal with parent
-	//find closes value
-	//replace the old switch values
-	//run remove again
+	rn=n->data;
 	loop=false;
       }
     }else if(counter->data>num){
@@ -192,29 +183,26 @@ void remove(node* &root, int num){
 }
  
 void remove2(node* &root, int num){
-  cout<<"remove2"<<endl;
   if(num==0){
-    cout<<"1"<<endl;
   }else{
     node* counter = root;
     bool loop=true;
     int LR=0;
-    while(loop){//problem when removing child of root                          
-      if(counter->data==num){               
-        cout<<"no children"<<endl;
+    while(loop){                          
+      if(counter->data==num&&!(counter->left)&&!(counter->right)){             
         counter=counter->parent;
         if(LR==1){
           counter->left=NULL;
         }else{
           counter->right=NULL;
         }
-        loop=false;
-      }else if(num<counter->data){
-	counter=counter->left;
-	LR=1;
-      }else{
+        loop=false;							       
+      }else if(num>counter->data){
 	counter=counter->right;
 	LR=2;
+      }else{
+	counter=counter->left;
+	LR=1;
       }
     }
   }
