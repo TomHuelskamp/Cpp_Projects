@@ -24,11 +24,13 @@ int main(){
     cin>>num;
     cin.get();
     add(root, num, root);
+    root->rb=false;
     print(root,0);
   }
   return 0;
 }
-node*rotateLeft(node* &n){//& ?
+node*rotateLeft(node* &n){//& 
+  cout<<"rotate left"<<endl;
   node* r=n->right;
   node* l=n->left;
   r->left=n;
@@ -40,6 +42,7 @@ node*rotateLeft(node* &n){//& ?
   return(r);
 }
 node*rotateRight(node* &n){
+  cout<<"rotate right"<<endl;
   node* r=n->right;
   node* l=r->right;
   r->right=n;
@@ -51,6 +54,11 @@ node*rotateRight(node* &n){
   return(r);
 }
 void add(node* &root, int num, node* &p){
+  /**
+     node* empty=new node();
+     empty->parent=root;
+    
+   **/
   if(!root){
     if(p==root){
       root=new node();
@@ -60,6 +68,7 @@ void add(node* &root, int num, node* &p){
       //root->lr=NULL
       root->rb=false;
       root->key=num;
+      root->parent=NULL;
       return;
       //root has been planted as black
     }else if(!root){
@@ -103,47 +112,64 @@ void print(node* root, int space){
   print(root->left,space);
 }
 void insertMaintenance(node* &n){
-  while(n->parent->rb!=false){//1. 
+  cout<<"hello!"<<endl;
+  while(n->parent->rb==true){//1. 
+    cout<<"1."<<endl;
     if(n->parent==n->parent->parent->right){//2.
       //
       node* u=n->parent->parent->left;
-      if(u->rb==true){//Case1 a.
-	u->rb=false;
-	n->parent->rb=false;
-	n->parent->parent->rb=true;
-	n=n->parent->parent;//Case1 b.
+      if(u!=NULL){//my addition
+	if(u->rb==true){//Case1 a.
+	  cout<<"case1"<<endl;
+	  u->rb=false;
+	  n->parent->rb=false;
+	  n->parent->parent->rb=true;
+	  n=n->parent->parent;//Case1 b.
+	}
       }
       //
-      else{
+      else if(u==NULL || u->rb==false){//added if part of else
 	if(n==n->parent->left){//Case2 c.
+	  cout<<"case2"<<endl;
 	  n=n->parent;
 	  rotateLeft(n);//Case2 d.
 	}
 	//                                                            
-      n->parent->rb=false;//Case3 e.                                  
-      n->parent->parent->rb=true;
-      rotateLeft(n->parent->parent);//Case3 f.                                      
+	cout<<"case3"<<endl;
+	n->parent->rb=false;//Case3 e.                             
+	n->parent->parent->rb=true;
+	rotateLeft(n->parent->parent);//Case3 f.                                      
       //
       }
     }
      else{//3.
-       node* u=n->parent->parent->right;
-       if(u->rb==true){//3. a.
-	  u->rb=false;
+       cout<<"else"<<endl;
+       node* u=n->parent->parent->right;//I think the problem is NULL nodes
+       if(u!=NULL&&u->rb==true){//3. a.
+	 cout<<"3.a."<<endl;
+	 u->rb=false;
 	  n->parent->rb=false;
 	  n->parent->parent->rb=true;
 	  n=n->parent->parent;//3. b.
 	}
        else{
+	 cout<<"3.c."<<endl;
 	 if(n==n->parent->right){//3. c.
 	   n=n->parent;
 	   rotateLeft(n);
 	 }
 	 n->parent->rb=false;//3. d.
+	 cout<<"before"<<endl;
 	 n->parent->parent->rb=true;//3. e.
+	 cout<<"after"<<endl;
 	 rotateRight(n->parent->parent);
 	}
       }
+    //if(n->parent==NULL){
+    //break;
+    //}
+    //problem with gp when there is no gp
   }
+  cout<<"end"<<endl;
   //4. set root black
 }
