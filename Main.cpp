@@ -12,8 +12,13 @@ struct node{
 };
 void add(node* &root, int num, node* &p);
 void print(node* root, int space);
-node* rotateLeft(node* &n);
-node* rotateRight(node* &n);
+//node* rotateLeft(node* &n);
+//node* rotateRight(node* &n);
+void rotateLeft(node* &n);
+void rotateRight(node* &n);
+void newRotateRight(node* &x);
+void newRotateLeft(node* &x);
+
 void insertMaintenance(node* &n);
 int main(){
   bool forever=true;
@@ -25,14 +30,55 @@ int main(){
     cin.get();
     add(root, num, root);
     root->rb=false;
+    cout<<root->key;
+    if((root->right)!=NULL){
+      cout<<","<<root->right->key;
+    }
     print(root,0);
   }
   return 0;
 }
-node*rotateLeft(node* &n){//& 
+void newRotateRight(node* &x){
+  node* y=x->left;
+  x->left=y->right;
+  if(y->right!=NULL){
+    y->right->parent=x;
+  }
+  y->parent=x->parent;
+  if(x->parent==NULL){
+    cout<<"this->root"<<endl;
+    //this->root=y
+  }else if(x==x->parent->right){
+    x->parent->right=y;
+  }else{
+    x->parent->left=y;
+  }
+  y->right=x;
+  x->parent=y;
+}
+void newRotateLeft(node* &x){
+  node* y=x->right;
+  x->right=y->left;
+  if(y->left !=NULL){
+    y->left->parent=x;
+  }
+  y->parent=x->parent;
+  if(x->parent==NULL){
+    cout<<"this->root"<<endl;
+    //this->root=y;
+  }else if(x==x->parent->left){
+    x->parent->left=y;
+  }else{
+    x->parent->right=y;
+  }
+    y->left=x;
+  x->parent=y;
+}
+/**
+node* rotateLeft(node* &n){//& 
   cout<<"rotate left"<<endl;
   node* r=n->right;
-  node* l=n->left;
+  node* l=r->left;//n->left
   r->left=n;
   n->right=l;
   n->parent=r;
@@ -41,9 +87,9 @@ node*rotateLeft(node* &n){//&
   }
   return(r);
 }
-node*rotateRight(node* &n){
+node* rotateRight(node* &n){
   cout<<"rotate right"<<endl;
-  node* r=n->right;
+  node* r=n->left;
   node* l=r->right;
   r->right=n;
   n->left=l;
@@ -53,12 +99,29 @@ node*rotateRight(node* &n){
   }
   return(r);
 }
+**/
+void rotateLeft(node* &n){
+  cout<<"rotate left"<<endl;
+  cout<<"pivot from: "<<n->key;
+  node* c=n;
+  node* l=n->left;
+  node* ll=l;
+  node* r=n->right;
+  node* rr=r;
+  n=r;
+  n->left=c;
+  n->left->right=NULL;
+  
+  print(n,0);
+  //n->left=n;
+  cout<<"n is: "<<n->key;
+  
+  //n->left=copy;
+}
+void rotateRight(node* &n){
+
+}
 void add(node* &root, int num, node* &p){
-  /**
-     node* empty=new node();
-     empty->parent=root;
-    
-   **/
   if(!root){
     if(p==root){
       root=new node();
@@ -113,7 +176,7 @@ void print(node* root, int space){
 }
 void insertMaintenance(node* &n){
   cout<<"hello!"<<endl;
-  while(n->parent->rb==true){//1. 
+  while(n->parent->rb==true){//1.
     cout<<"1."<<endl;
     if(n->parent==n->parent->parent->right){//2.
       //
@@ -132,13 +195,16 @@ void insertMaintenance(node* &n){
 	if(n==n->parent->left){//Case2 c.
 	  cout<<"case2"<<endl;
 	  n=n->parent;
+	  //newRotateLeft(n);
 	  rotateLeft(n);//Case2 d.
+
 	}
 	//                                                            
 	cout<<"case3"<<endl;
 	n->parent->rb=false;//Case3 e.                             
 	n->parent->parent->rb=true;
-	rotateLeft(n->parent->parent);//Case3 f.                                      
+	//newRotateLeft(n->parent->parent);
+	rotateLeft(n->parent->parent);//Case3 f.                                    
       //
       }
     }
@@ -156,20 +222,28 @@ void insertMaintenance(node* &n){
 	 cout<<"3.c."<<endl;
 	 if(n==n->parent->right){//3. c.
 	   n=n->parent;
+	   //newRotateLeft(n);
 	   rotateLeft(n);
 	 }
 	 n->parent->rb=false;//3. d.
 	 cout<<"before"<<endl;
 	 n->parent->parent->rb=true;//3. e.
 	 cout<<"after"<<endl;
+	 //newRotateRight(n->parent->parent);
 	 rotateRight(n->parent->parent);
-	}
+	 
+       }
       }
     //if(n->parent==NULL){
     //break;
     //}
     //problem with gp when there is no gp
+    // cout<<"current: "<<n->key<<endl;
   }
+  
+  //cout<<"n: "<<n->key;
+  //cout<<"n parent:"<<n->parent->key;
+// print(root, 0);
   cout<<"end"<<endl;
   //4. set root black
 }
