@@ -95,33 +95,44 @@ node* rotateRight(node* &n){
 **/
 void rotateLeft(node* n, node* &rt){//fix parents
   cout<<"rotate left"<<endl;
+  cout<<"n: "<<n->key<<endl;
     node* c=n;
     node* l=n->left;
     node* r=n->right;
+    node* p=n->parent;
     bool rootParentFix = false;
       if(n==rt){
 	rootParentFix=true;
       }
-      if(rootParentFix){
-      n=r; 
-      n->left=c;
-      n->left->parent=n;
-      n->left->right=NULL;
-      if(rootParentFix){
-	rt=n;
-	rt->parent=NULL;
-      }else{
+      if(n->right!=NULL){
+	n=r;
 	n->parent=c->parent;
-      }
-    }
-    else{
-      n->left=NULL;//could be child left
-      n=l;
-      n->parent=c->parent;
-      n->right=c;
-      n->right->parent=n;
-      n->right->left=NULL;
-      rt=n->parent;
+	n->left=c;
+	n->left->parent=n;
+	n->left->right=NULL;
+	if(rootParentFix){
+	  rt=n;
+	  rt->parent=NULL;
+	}else{
+	  while(n->parent!=NULL){
+	    cout<<"l,"<<endl;
+	    n=n->parent;
+	  }
+	  rt=n;
+	  rt->parent=NULL;
+	}
+      }else{//if parent and child are in opposite directions
+	n->left=NULL;
+	l->parent=p;//
+	l->right=n;//
+	n->parent=l;//
+	
+	p->right=l;
+        //p->right->parent=p;//causing problems
+	//p->right->right=n;
+        //p->right->right->parent=p->right->right;
+        rt=p;
+	rt->parent=NULL;
     }
   print(rt,0);
   cout<<"rotate left finished"<<endl;
@@ -230,8 +241,7 @@ void insertMaintenance(node* n,node* &rt){
 	  cout<<"n:"<<n->key<<endl;
 	  cout<<"n->left:"<<n->left->key<<endl;
 	  //newRotateLeft(n);
-	  //rotateLeft(n,rt);//Case2 d.
-	  rotateRight(n,rt);
+	  rotateLeft(n,rt);//Case2 d.
 	}
 	//                                                            
 	cout<<"case3"<<endl;
