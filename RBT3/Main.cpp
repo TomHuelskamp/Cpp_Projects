@@ -104,6 +104,7 @@ void rotateLeft(node* n, node* &rt){//fix parents
       if(n==rt){
 	rootParentFix=true;
       }
+      //ROTATE A
       if(n->right!=NULL){
 	n=r;
 	n->parent=c->parent;
@@ -114,13 +115,14 @@ void rotateLeft(node* n, node* &rt){//fix parents
 	  rt=n;
 	  rt->parent=NULL;
 	}else{
+	  n->parent->right=n;
+	  //rt=n;
 	  while(n->parent!=NULL){
-	    cout<<"l,"<<endl;
 	    n=n->parent;
 	  }
-	  rt=n;
 	  rt->parent=NULL;
 	}
+	//ROTATE B
       }else{//if parent and child are in opposite directions
 	n->left=NULL;
 	l->parent=p;//
