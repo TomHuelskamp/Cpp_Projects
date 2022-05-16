@@ -1,6 +1,9 @@
 #include <vector>
 #include <iostream>
 #include <cstring>
+#include <iomanip>
+#include <fstream>
+#include <math.h>
 using namespace std;
 struct node{
   int key;
@@ -19,12 +22,30 @@ int main(){
   bool forever=true;
   node* root=NULL;
   while(forever==true){
+    //cout<<"add a number by 'console' or 'file'?: ";
+    //char input[20];
+    //cin.get(input,20);
+    //cin.get();
+    //if(strcmp(input,"console")==0){
     int num;
     cout<<"add: ";
-    cin>>num;
-    cin.get();
-    add(root, num, root, root);
-    print(root,0);
+      cin>>num;
+      cin.get();
+      add(root, num, root, root);
+      print(root,0);
+      /**}else{
+      string numberString;
+      int num;
+      ifstream file1;
+      file1.open("file1.txt");
+      while(file1){
+	file1>>numberString;
+	num=stoi(numberString);
+	add(root,num,root,root);
+	print(root,0);
+      }
+      file1.close();
+      }**/
   }
   return 0;
 }
@@ -171,8 +192,13 @@ void print(node* root, int space){
 }
 void insertMaintenance(node* n,node* &rt){
   cout<<"tree maintenance"<<endl;
+  int counter=0;
   while(n->parent->rb==true){//1.
-    cout<<"."<<endl;
+    cout<<" "<<endl;
+    counter++;
+    if(counter>10){
+      break;
+     }
     if(n->parent==n->parent->parent->right){//2.
       node* u=n->parent->parent->left;
       if(u!=NULL){
