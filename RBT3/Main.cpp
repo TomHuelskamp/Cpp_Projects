@@ -54,6 +54,7 @@ void rotateLeft(node* n, node* &rt){
   node* c=n;
   node* l=n->left;
   node* r=n->right;
+  node* rl=r->left;
   node* p=n->parent;
   bool rootParentFix = false;
   if(n==rt){
@@ -66,6 +67,16 @@ void rotateLeft(node* n, node* &rt){
     n->left=c;
     n->left->parent=n;
     n->left->right=NULL;
+    //
+    node* nl=n->left;
+    while(nl->right!=NULL){
+    nl=nl->right;
+    }
+    nl->right=rl;
+    if(nl->right!=NULL){
+      nl->right->parent=nl;
+    }
+    //
     if(rootParentFix){
       rt=n;
       rt->parent=NULL;
@@ -74,7 +85,7 @@ void rotateLeft(node* n, node* &rt){
       while(n->parent!=NULL){
 	n=n->parent;
       }
-      rt=n;//
+      rt=n;
       rt->parent=NULL;
     }
     //print(rt,0);
@@ -98,6 +109,7 @@ void rotateRight(node* n, node* &rt){//fix parents
   cout<<"rotate right"<<endl;
   node* c=n;
   node* l=n->left;
+  node* lr=l->right;
   node* r=n->right;
   node* p=n->parent;
   bool rootParentFix=false;
@@ -111,6 +123,16 @@ void rotateRight(node* n, node* &rt){//fix parents
     n->right=c;
     n->right->parent=n;
     n->right->left=NULL;
+    //
+    node* nr=n->right;
+    while(nr->left!=NULL){
+      nr=nr->left;
+    }
+    nr->left=lr;
+    if(nr->left!=NULL){
+      nr->left->parent=nr;
+    }
+    //
     if(rootParentFix){
       rt=n;
       rt->parent=NULL;
