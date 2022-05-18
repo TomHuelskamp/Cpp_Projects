@@ -50,7 +50,7 @@ int main(){
   return 0;
 }
 void rotateLeft(node* n, node* &rt){
-  cout<<"rotate left";
+  cout<<"rotate left"<<endl;
   node* c=n;
   node* l=n->left;
   node* r=n->right;
@@ -95,7 +95,7 @@ void rotateLeft(node* n, node* &rt){
   }
 }
 void rotateRight(node* n, node* &rt){//fix parents
-  cout<<"rotate right";
+  cout<<"rotate right"<<endl;
   node* c=n;
   node* l=n->left;
   node* r=n->right;
@@ -187,21 +187,28 @@ void print(node* root, int space){
   }else{
     cout<<"b";
   }
+  if(root->parent!=NULL){
+  cout<<"-p:"<<root->parent->key;
+  }
   cout<<"\n";
   print(root->left,space);
 }
 void insertMaintenance(node* n,node* &rt){
+  print(rt,0);
   cout<<"tree maintenance"<<endl;
   int counter=0;
   while(n->parent->rb==true){//1.
-    cout<<" "<<endl;
+    cout<<"-"<<endl;
+    cout<<"n: "<<n->key;
     counter++;
     if(counter>10){
       break;
-     }
+    }
+    cout<<"number 1"<<endl;
     if(n->parent==n->parent->parent->right){//2.
       node* u=n->parent->parent->left;
-      if(u!=NULL){
+      cout<<"number2"<<endl;
+      if(u!=NULL&&u->rb==true){
 	if(u->rb==true){//Case1 a.
 	  u->rb=false;
 	  n->parent->rb=false;
@@ -209,27 +216,28 @@ void insertMaintenance(node* n,node* &rt){
 	  n=n->parent->parent;//Case1 b.
 	}
       }else if(u==NULL || u->rb==false){//added if part of else
+	cout<<"number3"<<endl;
 	if(n==n->parent->left){//Case2 c.
 	  n=n->parent;
 	  rotateLeft(n,rt);//Case2 d.
 	  //rotateRight(n,rt);
-	}                                                
+	}
+	//Should do this
+	cout<<"should do this"<<endl;
 	n->parent->rb=false;//Case3 e.                             
 	n->parent->parent->rb=true;
 	rotateLeft(n->parent->parent,rt);//Case3 f.                                    
       }
-    }
-     else{//3
+    }else{//3
        node* u=n->parent->parent->right;
-       if(u!=NULL){//3. a.
+       if(u!=NULL&&u->rb==true){//3. a.
 	 if(u->rb==true){
 	   u->rb=false;
 	   n->parent->rb=false;
 	   n->parent->parent->rb=true;
 	   n=n->parent->parent;//3. b.
 	 }
-	 }
-       else if(u==NULL || u->rb==false){
+       }else if(u==NULL || u->rb==false){
 	 if(n==n->parent->right){//3. c.
 	   n=n->parent;
 	   //rotateLeft(n,rt); or
@@ -244,6 +252,11 @@ void insertMaintenance(node* n,node* &rt){
     if(n==rt){
       break;
     }
+    node* c=n;
+    while(c->parent!=NULL){
+      c=c->parent;
+    }
+    rt=c;
     //rt->rb=false;
   }
   rt->rb=false;//4.
