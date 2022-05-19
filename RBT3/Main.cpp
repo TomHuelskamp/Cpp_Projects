@@ -1,3 +1,6 @@
+//This program sorts numbers read in from a file or entered in console in a red black tree
+//Thomas Huelskamp
+//May 19, 2022
 #include <vector>
 #include <iostream>
 #include <cstring>
@@ -13,68 +16,65 @@ struct node{
   bool lr;//left right
   bool rb;//red black
 };
-void add(node* &root, int num, node* &p, node* &r);
-void print(node* root, int space);
-void rotateLeft(node* n, node* &rt);
-void rotateRight(node* n, node* &rt);
-void insertMaintenance(node* n, node* &rt);
+void add(node* &root, int num, node* &p, node* &r);//adds numbers into an unbalanced tree
+void print(node* root, int space);//prints tree
+void rotateLeft(node* n, node* &rt);//left rotation
+void rotateRight(node* n, node* &rt);//right rotation
+void insertMaintenance(node* n, node* &rt);//balances the tree after insert
 int main(){
   bool forever=true;
-  node* root=NULL;
+  node* root=NULL;//creating the tree's root
   while(forever==true){
-    /**
-    cout<<"do you want to 'add' from console or 'read' from file?: ";
+    cout<<"do you want to 'add' from console or 'read' from file?: ";//read or add
     char input[20];
     cin.get(input,20);
     cin.get();
-    if (strcmp(input,"read")==0){
+    if (strcmp(input,"read")==0){//read from a file 
       string numberString;
       int num=0;
-      int num1=1;
+      int num1=-1;
       ifstream file1;
-      file1.open("file1.txt");
+      file1.open("file1.txt");//using file1.txt file
       while(file1){
 	file1>>numberString;
 	num=stoi(numberString);
-	if(num==num1){
+	if(num==num1){//reading stops if it finds two consecutive numbers in the file
 	  break;
 	}
 	num1=num;
-	add(root,num,root,root);
-	print(root,0);
+	add(root,num,root,root);//add
+	print(root,0);//print after each number is added
       }
       file1.close();
-      }**/
-    //else{
+    }else{//otherwise, assumes the user wants to add from  console
       int num;
       cout<<"add: ";
       cin>>num;
       cin.get();
-      add(root,num,root,root);
-      print(root,0);
-      // }
+      add(root,num,root,root);//add
+      print(root,0);//print the new, updated tree
+    }
   }
   return 0;
 }
-void rotateLeft(node* n, node* &rt){
+void rotateLeft(node* n, node* &rt){//used for left rotations
   cout<<"rotate left"<<endl;
   node* c=n;
   node* l=n->left;
   node* r=n->right;
   node* p=n->parent;
-  bool rootParentFix = false;
+  bool rootParentFix = false//for when the node used to 'pivot' is parent
   if(n==rt){
     rootParentFix=true;
   }
-  if(n->right!=NULL){//ROTATE A
-    node* rl=r->left;//
+  if(n->right!=NULL){//ROTATE A, for when a chain of 3 consecutive numbers is being turned into a parent and two children
+    node* rl=r->left;
     cout<<"rotate A"<<endl;
     n=r;
     n->parent=c->parent;
     n->left=c;
     n->left->parent=n;
     n->left->right=NULL;
-    //
     node* nl=n->left;
     while(nl->right!=NULL){
     nl=nl->right;
@@ -83,7 +83,6 @@ void rotateLeft(node* n, node* &rt){
     if(nl->right!=NULL){
       nl->right->parent=nl;
     }
-    //
     if(rootParentFix){
       rt=n;
       rt->parent=NULL;
@@ -95,7 +94,7 @@ void rotateLeft(node* n, node* &rt){
       rt=n;
       rt->parent=NULL;
     }
-  }else{//ROTATE B
+  }else{//ROTATE B, turning an unlinear chain of 3 consecutive numbers into an organized chain from greatest to least
     cout<<"rotate B"<<endl;
     n->left=NULL;
     l->parent=p;
@@ -106,11 +105,9 @@ void rotateLeft(node* n, node* &rt){
       p=p->parent;
     }
     rt=p;
-    //rt->parent=p->parent;//probably need the same parent fix as left rotate A
-    //rt->parent->right=rt;
   }
 }
-void rotateRight(node* n, node* &rt){
+void rotateRight(node* n, node* &rt){//used for right rotations, this is all identical to rotateLeft, besides that all the sides are reversed
   cout<<"rotate right"<<endl;
   node* c=n;
   node* l=n->left;
@@ -128,7 +125,6 @@ void rotateRight(node* n, node* &rt){
     n->right=c;
     n->right->parent=n;
     n->right->left=NULL;
-    //
     node* nr=n->right;
     while(nr->left!=NULL){
       nr=nr->left;
@@ -137,7 +133,6 @@ void rotateRight(node* n, node* &rt){
     if(nr->left!=NULL){
       nr->left->parent=nr;
     }
-    //
     if(rootParentFix){
       rt=n;
       rt->parent=NULL;
@@ -162,9 +157,9 @@ void rotateRight(node* n, node* &rt){
     rt=p;
   }
 }
-void add(node* &root, int num, node* &p, node* &rt){
-  if(!root){
-    if(p==root){
+void add(node* &root, int num, node* &p, node* &rt){//adding numbers into the tree
+  if(!root){//if the node is null, and the program is at the end of a leaf, add the input number
+    if(p==root){//if the input is the first number being added, parent is NULL and is black
       root=new node();
       root->left=NULL;
       root->right=NULL;
@@ -172,7 +167,7 @@ void add(node* &root, int num, node* &p, node* &rt){
       root->key=num;
       root->parent=NULL;
       return;
-    }else if(!root){
+    }else if(!root){//if the input isn't the first number, and has parents, and is red
       root=new node();
       root->key=num;
       root->parent=p;
@@ -185,84 +180,83 @@ void add(node* &root, int num, node* &p, node* &rt){
       }
       root->rb=true;
     }
-    insertMaintenance(root,rt);
-  }else if(num<root->key){
+    insertMaintenance(root,rt);//calling maintenence to balance the tree
+  }else if(num<root->key){//recursively navigating the tree to get to a leaf
     add(root->left,num,root,rt);
-  }else{
+  }else{//recursively navigating the tree to get to a leaf
     add(root->right,num,root,rt);
   }
 }
 
-void print(node* root, int space){
-  if(!root){
+void print(node* root, int space){//prints the tree using spaces to represent different levels and lines to represent different sides
+  if(!root){//root is empty
     return;
   }
   space +=3;
-  print(root->right, space);
+  print(root->right, space);//calls the right child of root
   cout<<endl;
-  for(int i=3; i<space; i++){
+  for(int i=3; i<space; i++){//adds the right number of spaces
     cout<<" ";
   }
-  cout<<root->key;
+  cout<<root->key;//prints
   if(root->rb){
     cout<<"r";
   }else{
     cout<<"b";
   }
-  if(root->parent!=NULL){/////////
-    cout<<"-p:"<<root->parent->key;
-  }////////
+  if(root->parent!=NULL){
+    //cout<<"-p:"<<root->parent->key;
+  }
   cout<<"\n";
-  print(root->left,space);
+  print(root->left,space);//calls the left child of root
 }
 void insertMaintenance(node* n,node* &rt){
   cout<<"tree maintenance"<<endl;
-  int counter=0;
-  while(n->parent->rb==true){//1.
+  //I learned the cases and format from Programiz
+  //int counter=0;
+  while(n->parent->rb==true){//continues to go through the tree if parent is red
     //if(counter>0){
-      cout<<"-n: "<<n->key<<endl;
-      print(rt,0);
+    //cout<<"-n: "<<n->key<<endl;
+    //print(rt,0);
       //}
-    if(n->parent==n->parent->parent->right){//2.
+    if(n->parent==n->parent->parent->right){//Parent is on the right
       node* u=n->parent->parent->left;
-      if(u!=NULL&&u->rb==true){
-	if(u->rb==true){//Case1 a.
+      if(u!=NULL&&u->rb==true){//uncle is red
+	if(u->rb==true){
 	  u->rb=false;
 	  n->parent->rb=false;
 	  n->parent->parent->rb=true;
-	  n=n->parent->parent;//Case1 b.
+	  n=n->parent->parent;
 	}
-      }else if(u==NULL || u->rb==false){//added if part of else
-	if(n==n->parent->left){//Case2 c.
+      }else if(u==NULL || u->rb==false){//uncle is black
+	if(n==n->parent->left){
 	  n=n->parent;
-	  //rotateRight(n,rt);
-	  rotateLeft(n,rt);//Case2 d.
+	  rotateLeft(n,rt);
 	}
-	n->parent->rb=false;//Case3 e.                             
+	n->parent->rb=false;                             
 	n->parent->parent->rb=true;
-	rotateLeft(n->parent->parent,rt);//Case3 f.                                    
+	rotateLeft(n->parent->parent,rt);                                    
       }
-    }else{//3
+    }else{//parent is on the left
        node* u=n->parent->parent->right;
-       if(u!=NULL&&u->rb==true){//3. a.
+       if(u!=NULL&&u->rb==true){//uncle is red
 	 if(u->rb==true){
 	   u->rb=false;
 	   n->parent->rb=false;
 	   n->parent->parent->rb=true;
-	   n=n->parent->parent;//3. b.
+	   n=n->parent->parent;
 	 }
-       }else if(u==NULL || u->rb==false){
-	 if(n==n->parent->right){//3. c.
+       }else if(u==NULL || u->rb==false){//uncle is black
+	 if(n==n->parent->right){
 	   n=n->parent;
 	   rotateRight(n,rt);
-	   //rotateLeft(n,rt);
 	 }
-	 n->parent->rb=false;//3. d.
-	 n->parent->parent->rb=true;//3. e.
+	 n->parent->rb=false;
+	 n->parent->parent->rb=true;
 	 rotateRight(n->parent->parent,rt);
        }
       }
-    if(n==rt){
+    if(n==rt){//stop if the tree has been balanced through root
       break;
     }
     node* c=n;
@@ -271,5 +265,5 @@ void insertMaintenance(node* n,node* &rt){
     }
     rt=c;
   }
-  rt->rb=false;//4.
+  rt->rb=false;//set root to black
 }
