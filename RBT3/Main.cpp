@@ -46,6 +46,8 @@ int main(){
 	print(root,0);//print after each number is added
       }
       file1.close();
+    }else if(strcmp(input,"quit")==0){//quit
+      break;
     }else{//otherwise, assumes the user wants to add from  console
       int num;
       cout<<"add: ";
@@ -63,7 +65,7 @@ void rotateLeft(node* n, node* &rt){//used for left rotations
   node* l=n->left;
   node* r=n->right;
   node* p=n->parent;
-  bool rootParentFix = false//for when the node used to 'pivot' is parent
+  bool rootParentFix = false;//for when the node used to 'pivot' is parent
   if(n==rt){
     rootParentFix=true;
   }
