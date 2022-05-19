@@ -22,19 +22,12 @@ int main(){
   bool forever=true;
   node* root=NULL;
   while(forever==true){
-    cout<<"add a number by 'console' or 'file'?: ";
+    /**
+    cout<<"do you want to 'add' from console or 'read' from file?: ";
     char input[20];
     cin.get(input,20);
     cin.get();
-    // if(strcmp(input,"console")==0){
-    //int num;
-    //cout<<"add: ";
-    //cin>>num;
-    //cin.get();
-      //add(root, num, root, root);
-      //print(root,0);
-      //}
-    if (strcmp(input,"file")==0){
+    if (strcmp(input,"read")==0){
       string numberString;
       int num=0;
       int num1=1;
@@ -51,14 +44,15 @@ int main(){
 	print(root,0);
       }
       file1.close();
-    }else{
+      }**/
+    //else{
       int num;
       cout<<"add: ";
       cin>>num;
       cin.get();
       add(root,num,root,root);
       print(root,0);
-    }
+      // }
   }
   return 0;
 }
@@ -67,13 +61,13 @@ void rotateLeft(node* n, node* &rt){
   node* c=n;
   node* l=n->left;
   node* r=n->right;
-  node* rl=r->left;
   node* p=n->parent;
   bool rootParentFix = false;
   if(n==rt){
     rootParentFix=true;
   }
   if(n->right!=NULL){//ROTATE A
+    node* rl=r->left;//
     cout<<"rotate A"<<endl;
     n=r;
     n->parent=c->parent;
@@ -120,7 +114,6 @@ void rotateRight(node* n, node* &rt){
   cout<<"rotate right"<<endl;
   node* c=n;
   node* l=n->left;
-  node* lr=l->right;
   node* r=n->right;
   node* p=n->parent;
   bool rootParentFix=false;
@@ -128,6 +121,7 @@ void rotateRight(node* n, node* &rt){
     rootParentFix=true;
   }
   if(n->left!=NULL){//ROTATE A
+    node* lr=l->right;
     cout<<"rotate A"<<endl;
     n=l;
     n->parent=c->parent;
@@ -215,9 +209,9 @@ void print(node* root, int space){
   }else{
     cout<<"b";
   }
-  //if(root->parent!=NULL){
-  //cout<<"-p:"<<root->parent->key;
-  //}
+  if(root->parent!=NULL){/////////
+    cout<<"-p:"<<root->parent->key;
+  }////////
   cout<<"\n";
   print(root->left,space);
 }
@@ -225,10 +219,10 @@ void insertMaintenance(node* n,node* &rt){
   cout<<"tree maintenance"<<endl;
   int counter=0;
   while(n->parent->rb==true){//1.
-    if(counter>0){
+    //if(counter>0){
       cout<<"-n: "<<n->key<<endl;
       print(rt,0);
-    }
+      //}
     if(n->parent==n->parent->parent->right){//2.
       node* u=n->parent->parent->left;
       if(u!=NULL&&u->rb==true){
@@ -241,6 +235,7 @@ void insertMaintenance(node* n,node* &rt){
       }else if(u==NULL || u->rb==false){//added if part of else
 	if(n==n->parent->left){//Case2 c.
 	  n=n->parent;
+	  //rotateRight(n,rt);
 	  rotateLeft(n,rt);//Case2 d.
 	}
 	n->parent->rb=false;//Case3 e.                             
@@ -260,6 +255,7 @@ void insertMaintenance(node* n,node* &rt){
 	 if(n==n->parent->right){//3. c.
 	   n=n->parent;
 	   rotateRight(n,rt);
+	   //rotateLeft(n,rt);
 	 }
 	 n->parent->rb=false;//3. d.
 	 n->parent->parent->rb=true;//3. e.
@@ -271,7 +267,7 @@ void insertMaintenance(node* n,node* &rt){
     }
     node* c=n;
     while(c->parent!=NULL){
-      c=c->parent;
+    c=c->parent;
     }
     rt=c;
   }
