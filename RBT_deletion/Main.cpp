@@ -55,7 +55,7 @@ int main(){
       cin>>num;
       cin.get();
       remove(root,root,num);
-      //print(root,0);
+      print(root,0);
     }else{//otherwise, assumes the user wants to add from  console
       int num;
       cout<<"add: ";
@@ -223,12 +223,7 @@ void print(node* root, int space){//prints the tree using spaces to represent di
 void insertMaintenance(node* n,node* &rt){
   cout<<"tree maintenance"<<endl;
   //I learned the cases and format from Programiz
-  //int counter=0;
   while(n->parent->rb==true){//continues to go through the tree if parent is red
-    //if(counter>0){
-    //cout<<"-n: "<<n->key<<endl;
-    //print(rt,0);
-      //}
     if(n->parent==n->parent->parent->right){//Parent is on the right
       node* u=n->parent->parent->left;
       if(u!=NULL&&u->rb==true){//uncle is red
@@ -291,7 +286,33 @@ void remove(node* &root, node* &r, int num){
       originalrb=root->rb;
       //2.
       if(root->left==NULL){
+	cout<<"2."<<endl;
 	x=root->right;
+	cout<<"need to rotate"<<endl;
+	if(root->parent==NULL){
+	  cout<<"a"<<endl;
+	  r=x;
+	  cout<<"aa"<<endl;
+	}else if(root==root->parent->left){
+	  cout<<"b"<<endl;
+	  root->parent->left=x;
+	  cout<<"bb"<<endl;
+	}else{
+	  cout<<"c"<<endl;
+	  root->parent->right=x;
+	}
+	cout<<"enda"<<endl;
+	//node* rootp=root->parent;
+	if(x){
+	  x->parent=root->parent;///// PROBLEM
+	}
+	cout<<"End2."<<endl;
+      }
+      //3.
+      else if(root->right==NULL){
+	cout<<"3."<<endl;
+	//p=root->parent
+	x=root->left;
 	if(root->parent==NULL){
 	  r=x;
 	}else if(root==root->parent->right){
@@ -300,13 +321,15 @@ void remove(node* &root, node* &r, int num){
 	  root->parent->left=x;
 	}
 	x->parent=root->parent;
-      }
-      //3.
-      else if(root->right==NULL){
-	//p=root->parent
-	x=root->left;
 	//transplant root, root->left
-	
+	if(root->parent==NULL){
+	  r=x;
+	}else if(root==root->parent->left){
+	  root->parent->left=x;
+	}else{
+	  root->parent->right=x;
+	}
+	x->parent=root->parent;
 	//root=x;
 	//root->parent=p;
 	//p->left/right
@@ -314,6 +337,7 @@ void remove(node* &root, node* &r, int num){
       }
       //4.
       else{
+	cout<<"4."<<endl;
 	node* y=root->right;
 	while(y->left!=NULL){
 	  y=y->left;
@@ -323,15 +347,34 @@ void remove(node* &root, node* &r, int num){
 	if(y->parent==root){
 	  x->parent=y;
 	}else{
+	  if(y->parent==NULL){
+	    r=x;
+	  }else if(y==y->parent->left){
+	    y->parent->left=x;
+	  }else{
+	    y->parent->right=x;
+	  }
+	  if(y){
+	  x->parent=y->parent;
+	  }
 	  //transplant y, y->right
 	  y->right=root->right;
 	  y->right->parent=y;
 	}
 	//transplant(y, root)
+	if(y->parent==NULL){
+	  r=root; 
+	}else if(y==y->parent->left){
+	  y->parent->left=root;
+	}else{
+	  y->parent->right=root;
+	}
+	root->parent=y->parent;
 	y->left=root->left;
 	y->left->parent=y;
 	y->rb=root->rb;	
       }
+      cout<<"end?"<<endl;
       delete root;
       if(originalrb==false){
 	//deletemaintenance
