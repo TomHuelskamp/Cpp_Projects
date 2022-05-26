@@ -337,16 +337,21 @@ void remove(node* &root, node* &r, int num){
       }
       //4.
       else{
-	cout<<"4."<<endl;
+	cout<<"4."<<root->left->key<<endl;
 	node* y=root->right;
 	while(y->left!=NULL){
+	  cout<<"left."<<endl;
 	  y=y->left;
 	}
 	originalrb=y->rb;
+	cout<<"q"<<endl;
 	x=y->right;
+	cout<<"w"<<endl;
 	if(y->parent==root){
-	  x->parent=y;
+	  cout<<"4if"<<endl;
+	  // x->parent=y;
 	}else{
+	  cout<<"4else"<<endl;
 	  if(y->parent==NULL){
 	    r=x;
 	  }else if(y==y->parent->left){
@@ -354,25 +359,34 @@ void remove(node* &root, node* &r, int num){
 	  }else{
 	    y->parent->right=x;
 	  }
-	  if(y){
 	  x->parent=y->parent;
-	  }
+	  
 	  //transplant y, y->right
 	  y->right=root->right;
 	  y->right->parent=y;
 	}
+	cout<<"all."<<root->left->key<<endl;
 	//transplant(y, root)
-	if(y->parent==NULL){
-	  r=root; 
-	}else if(y==y->parent->left){
-	  y->parent->left=root;
+	node* clone=root;
+	if(root->parent==NULL){
+	  cout<<root->key<<"root"<<endl;
+	  r=y;
+	  cout<<root->key<<endl;
+	  cout<<"5root"<<endl;
+	}else if(root==root->parent->left){
+	  root->parent->left=y;
 	}else{
-	  y->parent->right=root;
-	}
-	root->parent=y->parent;
-	y->left=root->left;
+	  root->parent->right=y;
+	}	
+	y->parent=root->parent;
+
+	cout<<"hi"<<endl;
+	y->left=clone->left;
+	cout<<"h"<<endl;
+	cout<<clone->left->key;
 	y->left->parent=y;
-	y->rb=root->rb;	
+	cout<<"yo"<<endl;
+	y->rb=clone->rb;	
       }
       cout<<"end?"<<endl;
       delete root;
