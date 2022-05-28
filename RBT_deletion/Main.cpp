@@ -21,7 +21,7 @@ void print(node* root, int space);//prints tree
 void rotateLeft(node* n, node* &rt);//left rotation
 void rotateRight(node* n, node* &rt);//right rotation
 void insertMaintenance(node* n, node* &rt);//balances the tree after insert
-void remove(node* &root, node* &r, int num);
+void remove(node* root, node* &r, int num);
 int main(){
   bool forever=true;
   node* root=NULL;//creating the tree's root
@@ -55,6 +55,8 @@ int main(){
       cin>>num;
       cin.get();
       remove(root,root,num);
+      print(root,0);
+    }else if(strcmp(input,"print")==0){//print
       print(root,0);
     }else{//otherwise, assumes the user wants to add from  console
       int num;
@@ -183,11 +185,11 @@ void add(node* &root, int num, node* &p, node* &rt){//adding numbers into the tr
       root->parent=p;
       root->left=NULL;
       root->right=NULL;
-      if(p->key>root->key){
+      /** if(p->key>root->key){
 	root->lr=true;
       }else{
 	root->lr=false;
-      }
+	}**/
       root->rb=true;
     }
     insertMaintenance(root,rt);//calling maintenence to balance the tree
@@ -221,6 +223,7 @@ void print(node* root, int space){//prints the tree using spaces to represent di
   print(root->left,space);//calls the left child of root
 }
 void insertMaintenance(node* n,node* &rt){
+  print(rt,0);
   cout<<"tree maintenance"<<endl;
   //I learned the cases and format from Programiz
   while(n->parent->rb==true){//continues to go through the tree if parent is red
@@ -272,41 +275,34 @@ void insertMaintenance(node* n,node* &rt){
   }
   rt->rb=false;//set root to black
 }
-void remove(node* &root, node* &r, int num){
+void remove(node* root, node* &r, int num){
   bool originalrb;
   if(root==NULL ||root->key==num){//match
     if(root==NULL){
       cout<<"number not foud in the tree"<<endl;
     }else{//programiz
-      node* y=root;
+      //node* y=root;
       node* x;
       node* p;
-      cout<<"match!"<<endl;
+      cout<<"removing"<<endl;
       //1.
       originalrb=root->rb;
       //2.
       if(root->left==NULL){
 	cout<<"2."<<endl;
 	x=root->right;
-	cout<<"need to rotate"<<endl;
 	if(root->parent==NULL){
-	  cout<<"a"<<endl;
 	  r=x;
-	  cout<<"aa"<<endl;
 	}else if(root==root->parent->left){
-	  cout<<"b"<<endl;
 	  root->parent->left=x;
-	  cout<<"bb"<<endl;
 	}else{
-	  cout<<"c"<<endl;
 	  root->parent->right=x;
 	}
-	cout<<"enda"<<endl;
 	//node* rootp=root->parent;
-	if(x){
+	if(x!=NULL){
 	  x->parent=root->parent;///// PROBLEM
+	  cout<<"parentIF"<<endl;
 	}
-	cout<<"End2."<<endl;
       }
       //3.
       else if(root->right==NULL){
@@ -322,7 +318,7 @@ void remove(node* &root, node* &r, int num){
 	}
 	x->parent=root->parent;
 	//transplant root, root->left
-	if(root->parent==NULL){
+	/**if(root->parent==NULL){
 	  r=x;
 	}else if(root==root->parent->left){
 	  root->parent->left=x;
@@ -330,6 +326,7 @@ void remove(node* &root, node* &r, int num){
 	  root->parent->right=x;
 	}
 	x->parent=root->parent;
+	**/	
 	//root=x;
 	//root->parent=p;
 	//p->left/right
@@ -337,21 +334,15 @@ void remove(node* &root, node* &r, int num){
       }
       //4.
       else{
-	cout<<"4."<<root->left->key<<endl;
 	node* y=root->right;
 	while(y->left!=NULL){
-	  cout<<"left."<<endl;
 	  y=y->left;
 	}
 	originalrb=y->rb;
-	cout<<"q"<<endl;
 	x=y->right;
-	cout<<"w"<<endl;
 	if(y->parent==root){
-	  cout<<"4if"<<endl;
-	  // x->parent=y;
+	  x->parent=y;///
 	}else{
-	  cout<<"4else"<<endl;
 	  if(y->parent==NULL){
 	    r=x;
 	  }else if(y==y->parent->left){
@@ -365,31 +356,28 @@ void remove(node* &root, node* &r, int num){
 	  y->right=root->right;
 	  y->right->parent=y;
 	}
-	cout<<"all."<<root->left->key<<endl;
 	//transplant(y, root)
 	node* clone=root;
 	if(root->parent==NULL){
-	  cout<<root->key<<"root"<<endl;
 	  r=y;
-	  cout<<root->key<<endl;
-	  cout<<"5root"<<endl;
 	}else if(root==root->parent->left){
 	  root->parent->left=y;
 	}else{
 	  root->parent->right=y;
 	}	
 	y->parent=root->parent;
-
-	cout<<"hi"<<endl;
 	y->left=clone->left;
-	cout<<"h"<<endl;
-	cout<<clone->left->key;
+	cout<<"message"<<clone->left->key;
 	y->left->parent=y;
-	cout<<"yo"<<endl;
 	y->rb=clone->rb;	
       }
-      cout<<"end?"<<endl;
+      //root=NULL;
+      // root->parent=NULL;
       delete root;
+      //while(x->parent!=NULL){
+	//x=x->parent;
+	//}
+      //r=x;
       if(originalrb==false){
 	//deletemaintenance
       }
