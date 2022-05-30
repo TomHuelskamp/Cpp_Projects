@@ -23,6 +23,7 @@ void rotateRight(node* n, node* &rt);//right rotation
 void insertMaintenance(node* n, node* &rt);//balances the tree after insert
 void remove(node* root, node* &r, int num);
 void search(node* root, int num);
+void deleteMaintenance(node* x, node* &rt);
 int main(){
   bool forever=true;
   node* root=NULL;//creating the tree's root
@@ -291,7 +292,7 @@ void remove(node* root, node* &r, int num){
       //node* y=root;
       node* x;
       node* p;
-      cout<<"removing"<<endl;
+      cout<<"removing "<<num<<endl;
       //1.
       originalrb=root->rb;
       //2.
@@ -341,15 +342,20 @@ void remove(node* root, node* &r, int num){
       }
       //4.
       else{
+	cout<<"4."<<endl;
 	node* y=root->right;
 	while(y->left!=NULL){
 	  y=y->left;
 	}
+	cout<<"y:"<<y->key<<endl;
 	originalrb=y->rb;
 	x=y->right;
+	cout<<"x"<<endl;
 	if(y->parent==root){
+	  cout<<"if"<<endl;
 	  x->parent=y;///
 	}else{
+	  cout<<"else"<<endl;
 	  if(y->parent==NULL){
 	    r=x;
 	  }else if(y==y->parent->left){
@@ -357,11 +363,15 @@ void remove(node* root, node* &r, int num){
 	  }else{
 	    y->parent->right=x;
 	  }
-	  x->parent=y->parent;
-	  
+	  cout<<"mid tplant"<<endl;
+	  if(x!=NULL){
+	    x->parent=y->parent;
+	  }
+	  cout<<"tplant done"<<endl;
 	  //transplant y, y->right
 	  y->right=root->right;
 	  y->right->parent=y;
+	  cout<<"end else"<<endl;
 	}
 	//transplant(y, root)
 	node* clone=root;
@@ -387,6 +397,7 @@ void remove(node* root, node* &r, int num){
       //r=x;
       if(originalrb==false){
 	//deletemaintenance
+	deleteMaintenance(x,r);
       }
     }
   }else if(num<root->key){
@@ -406,4 +417,50 @@ void search(node* root, int num){
     search(root->right,num);
   }
 }
-
+void deleteMaintenance(node* x, node* &rt){
+  print(rt,0);
+  cout<<endl<<"Delete Maintenance"<<endl;
+  while(x->rb==false){
+    if(x->parent==NULL){
+      cout<<"x is root"<<endl;
+    }
+    if(x==x->parent->left){
+      cout<<"left"<<endl;
+      node* w=x->parent->right;
+      if(w->rb==true){
+	//case1
+	w->rb=false;
+	x->parent->rb=true;
+	rotateLeft(x->parent,rt);
+	//left rotate x->parent
+	w=x->parent->right;
+      }
+      if(w->right->rb==false&&w->left->rb==true){
+	//case2
+	w->rb=true;
+	x=x->parent;
+      }else if(w->right->rb==false){
+	//case3
+	w->left->rb=false;
+	w->rb=true;
+	//right rotate w
+	rotateRight(w,rt);
+	x->parent->right=w;
+      }else{
+	//case4
+	w->rb=x->parent->rb;
+	x->parent->parent->rb=false;
+	w->right->rb=false;
+	//left rotate x parent
+	rotateLeft(x->parent, rt);
+	rt=x;
+      }
+    }
+    else{
+      cout<<"right"<<endl;
+      //VICE VERSA
+    }
+    x->rb=false;
+  }
+  
+}
