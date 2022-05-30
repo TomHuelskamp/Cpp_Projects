@@ -22,11 +22,12 @@ void rotateLeft(node* n, node* &rt);//left rotation
 void rotateRight(node* n, node* &rt);//right rotation
 void insertMaintenance(node* n, node* &rt);//balances the tree after insert
 void remove(node* root, node* &r, int num);
+void search(node* root, int num);
 int main(){
   bool forever=true;
   node* root=NULL;//creating the tree's root
   while(forever==true){
-    cout<<"do you want to 'add' from console, 'read' from file, or 'delete'?: ";//read or add
+    cout<<"do you want to 'add' from console, 'read' from file,  'delete', or 'search'?: ";//read or add
     char input[20];
     cin.get(input,20);
     cin.get();
@@ -58,6 +59,12 @@ int main(){
       print(root,0);
     }else if(strcmp(input,"print")==0){//print
       print(root,0);
+    }else if(strcmp(input,"search")==0){//search
+      int num;
+      cout<<"search for: ";
+      cin>>num;
+      cin.get();
+      search(root,num);
     }else{//otherwise, assumes the user wants to add from  console
       int num;
       cout<<"add: ";
@@ -388,3 +395,15 @@ void remove(node* root, node* &r, int num){
     remove(root->right,r,num);
   }
 }
+void search(node* root, int num){
+  if(root==NULL){
+    cout<<"the number you are searching for cannot be found"<<endl;
+  }else if(root->key==num){
+    cout<<num<<" is in the tree"<<endl;
+  }else if(num<root->key){
+    search(root->left,num);
+  }else{
+    search(root->right,num);
+  }
+}
+
