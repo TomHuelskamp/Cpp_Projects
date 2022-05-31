@@ -41,7 +41,7 @@ int main(){
       int num=0;
       int num1=-1;
       ifstream file1;
-      file1.open("file1.txt");//using file1.txt file
+      file1.open("file2.txt");//using file1.txt file
       while(file1){
 	file1>>numberString;
 	num=stoi(numberString);
@@ -127,7 +127,10 @@ void rotateLeft(node* n, node* &rt){//used for left rotations
   }else{//ROTATE B, turning an unlinear chain of 3 consecutive numbers into an organized chain from greatest to least
     cout<<"rotate B"<<endl;
     //n->left->nill=true;
-
+    n->left=new node();
+    n->left->parent=n;
+    n->left->nill=true;
+    n->left->rb=false;
     //
     l->parent=p;
     l->right=n;
@@ -184,7 +187,10 @@ void rotateRight(node* n, node* &rt){//used for right rotations, this is all ide
   }else{//ROTATE B
     cout<<"rotate B"<<endl;
     // n->right->nill=true;
-
+    n->right=new node();
+    n->right->parent=n;
+    n->right->nill=true;
+    n->right->rb=false;
     //
     r->parent=p;
     r->left=n;
@@ -327,18 +333,20 @@ void insertMaintenance(node* n,node* &rt){
 }
 void remove(node* root, node* &r, int num){
   bool originalrb;
-  if(root==NULL ||root->key==num){//match
-    if(root==NULL){
+  if(root==NULL||root->nill==true ||root->key==num){//match
+    if(root==NULL||root->nill==true){
       cout<<"number not foud in the tree"<<endl;
     }else{//programiz
       //node* y=root;
       node* x;
       node* p;
+      node* y;
+      y=root;
       cout<<"removing "<<num<<endl;
       //1.
-      originalrb=root->rb;
+      originalrb=y->rb;
       //2.
-      if(root->left==NULL){
+      if(root->left->nill==true){
 	cout<<"2."<<endl;
 	x=root->right;
 	if(root->parent==NULL){
@@ -355,7 +363,7 @@ void remove(node* root, node* &r, int num){
 	}
       }
       //3.
-      else if(root->right==NULL){
+      else if(root->right->nill==true){
 	cout<<"3."<<endl;
 	//p=root->parent
 	x=root->left;
@@ -386,7 +394,7 @@ void remove(node* root, node* &r, int num){
       else{
 	cout<<"4."<<endl;
 	node* y=root->right;
-	while(y->left!=NULL){
+	while(y->left->nill!=true){
 	  y=y->left;
 	}
 	cout<<"y:"<<y->key<<endl;
@@ -405,15 +413,12 @@ void remove(node* root, node* &r, int num){
 	  }else{
 	    y->parent->right=x;
 	  }
-	  cout<<"mid tplant"<<endl;
 	  if(x!=NULL){
 	    x->parent=y->parent;
 	  }
-	  cout<<"tplant done"<<endl;
 	  //transplant y, y->right
 	  y->right=root->right;
 	  y->right->parent=y;
-	  cout<<"end else"<<endl;
 	}
 	//transplant(y, root)
 	node* clone=root;
@@ -426,19 +431,12 @@ void remove(node* root, node* &r, int num){
 	}	
 	y->parent=root->parent;
 	y->left=clone->left;
-	cout<<"message"<<clone->left->key;
 	y->left->parent=y;
 	y->rb=clone->rb;	
       }
-      //root=NULL;
-      // root->parent=NULL;
       delete root;
-      //while(x->parent!=NULL){
-	//x=x->parent;
-	//}
-      //r=x;
+      
       if(originalrb==false){
-	//deletemaintenance
 	deleteMaintenance(x,r);
       }
     }
@@ -449,7 +447,7 @@ void remove(node* root, node* &r, int num){
   }
 }
 void search(node* root, int num){
-  if(root==NULL){
+  if(root==NULL||root->nill==true){
     cout<<"the number you are searching for cannot be found"<<endl;
   }else if(root->key==num){
     cout<<num<<" is in the tree"<<endl;
@@ -462,15 +460,15 @@ void search(node* root, int num){
 void deleteMaintenance(node* x, node* &rt){
   print(rt,0);
   cout<<endl<<"Delete Maintenance"<<endl;
-  if(x==NULL){
-    cout<<"x is NULL"<<endl;
-  }
-  while(x==NULL||x->rb==false){
-    cout<<" 1 "<<endl;
-    if(x!=NULL&&x->parent==NULL){
-      cout<<"x is root"<<endl;
-    }
-    cout<<" 2 "<<endl;
+  //if(x==NULL){
+    //cout<<"x is NULL"<<endl;
+    //}
+  node* w;
+  while(x->rb==false&&x!=rt){
+   
+    print(rt,0);
+    cout<<"x: "<<x->key<<endl;
+
     if(x==x->parent->left){
       cout<<"left"<<endl;
       node* w=x->parent->right;
@@ -478,6 +476,10 @@ void deleteMaintenance(node* x, node* &rt){
 	//case1
 	w->rb=false;
 	x->parent->rb=true;
+	cout<<"0004"<<endl;
+
+	//rotateRight(x->parent,rt);
+	
 	rotateLeft(x->parent,rt);
 	//left rotate x->parent
 	w=x->parent->right;
@@ -486,21 +488,28 @@ void deleteMaintenance(node* x, node* &rt){
 	//case2
 	w->rb=true;
 	x=x->parent;
-      }else if(w->right->rb==false){
-	//case3
-	w->left->rb=false;
-	w->rb=true;
-	//right rotate w
-	rotateRight(w,rt);
-	x->parent->right=w;
       }else{
+	if(w->right->rb==false){
+	  //case3
+	  w->left->rb=false;
+	  w->rb=true;
+	  //right rotate w
+	  cout<<"0005"<<endl;
+	  //rotateRight(w,rt);
+	  rotateLeft(w,rt);
+	  w=x->parent->right;
+	}
 	//case4
 	w->rb=x->parent->rb;
-	x->parent->parent->rb=false;
+	x->parent->rb=false;
 	w->right->rb=false;
 	//left rotate x parent
-	rotateLeft(x->parent, rt);
-	rt=x;
+	cout<<"0006"<<endl;
+	//rotateRight(x->parent,rt);
+	rotateLeft(x->parent, rt);// original;
+	//rt=x;
+	x=rt;
+	//////RT=X
       }
     }
     else{
@@ -511,28 +520,42 @@ void deleteMaintenance(node* x, node* &rt){
 	//case 1
 	w->rb=false;
 	x->parent->rb=true;
+	cout<<"0007"<<endl;
+	//rotateLeft(x->parent,rt);
 	rotateRight(x->parent,rt);
+	//original
 	w=x->parent->left;
       }
-      if(w->left->rb==false&&w->left->rb==false){
+      if(w->left->rb==false&&w->right->rb==false){
 	//case 2
 	w->rb=true;
 	x=x->parent;
-      }else if(w->left->rb==false){
-	//case 3
-	w->right->rb=false;
-	w->rb=true;
-	rotateLeft(w,rt);
-	x->parent->left=w;
       }else{
+	if(w->left->rb==false){
+	//case 3
+	  w->right->rb=false;
+	  w->rb=true;
+	  cout<<"0008"<<endl;
+	  rotateLeft(w,rt);
+	  w=x->parent->left;
+	}
 	//case 4
 	w->rb=x->parent->rb;
-	x->parent->parent->rb=false;
+	x->parent->rb=false;
 	w->left->rb=false;
-	rotateRight(x->parent,rt);
-	rt=x;
+	cout<<"0009"<<endl;
+	//rotateLeft(x->parent, rt);
+	rotateRight(x->parent,rt); //original;
+	x=rt;
+	//rt=x;
+	//////x=rt
       }
     }
+    node* c=x;
+    while(c->parent!=NULL){
+      c=c->parent;
+    }
+    
     x->rb=false;
   }
   
