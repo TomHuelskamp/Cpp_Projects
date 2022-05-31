@@ -44,6 +44,11 @@ void deleteRotateRight(node* x, node* &rt){
   }
   y->right=x;
   x->parent=y;
+  //
+  while(y->parent!=NULL){
+    y=y->parent;
+  }
+  rt=y;
 }
 void deleteRotateLeft(node* x, node* &rt){
   node* y=x->right;
@@ -62,7 +67,10 @@ void deleteRotateLeft(node* x, node* &rt){
   y->left=x;
   x->parent=y;
   //
-  //while(y->parent!=NULL)
+  while(y->parent!=NULL){
+    y=y->parent;
+  }
+  rt=y;
 }
 int main(){
   bool forever=true;
@@ -431,15 +439,57 @@ void remove(node* root, node* &r, int num){
       }
       //4.
       else{
+	node* y=root->left;
+	while(y->right->nill!=true){
+	  y=y->right;
+	}
+	cout<<"y: "<<y->key<<endl;
+	originalrb=y->rb;
+	x=y->left;
+	cout<<"x: "<<x->key<<endl;
+	if(y->parent==NULL){
+	  r=x;
+	}else if(y==y->parent->right){
+	  y->parent->right=x;
+	}else{
+	  y->parent->left=x;
+	}
+	x->parent=y->parent;
+	
+
+	if(root->parent==NULL){
+	  r=y;
+	}else if(root==root->parent->right){
+	  root->parent->right=y;
+	}else{
+	  root->parent->left=y;
+	}
+	y->parent=root->parent;
+	y->left=root->left;
+	y->left->parent=y;
+	y->right=root->right;
+	y->right->parent=y;
+	y->rb=root->rb;
+	//nill problem?
+	//y->
+	/**
 	cout<<"4."<<endl;
+
 	node* y=root->right;
 	while(y->left->nill!=true){
 	  y=y->left;
 	}
+	//node* y=root->left;
+	//while(y->right->nill!=true){
+	//y=y->right;
+	//}
+	
 	cout<<"y:"<<y->key<<endl;
 	originalrb=y->rb;
 	x=y->right;
-	cout<<"x"<<endl;
+	//x=y->left;
+	//cout<<"x"<<endl;
+	
 	if(y->parent==root){
 	  cout<<"if"<<endl;
 	  x->parent=y;///
@@ -455,9 +505,12 @@ void remove(node* root, node* &r, int num){
 	  if(x!=NULL){
 	    x->parent=y->parent;
 	  }
+	  
 	  //transplant y, y->right
 	  y->right=root->right;
 	  y->right->parent=y;
+	  // y->left=root->left;
+	  //y->left->parent=y;
 	}
 	//transplant(y, root)
 	node* clone=root;
@@ -472,6 +525,7 @@ void remove(node* root, node* &r, int num){
 	y->left=clone->left;
 	y->left->parent=y;
 	y->rb=clone->rb;	
+	**/      
       }
       delete root;
       
@@ -503,6 +557,7 @@ void deleteMaintenance(node* x, node* &rt){
     //cout<<"x is NULL"<<endl;
     //}
   node* w;
+  cout<<x->key<<endl;
   while(x->rb==false&&x->key!=rt->key){
    
     print(rt,0);
@@ -595,12 +650,12 @@ void deleteMaintenance(node* x, node* &rt){
 	//////x=rt
       }
     }
-    node* c=x;
-    while(c->parent!=NULL){
-      c=c->parent;
-    }
+    //node* c=x;
+    //while(c->parent!=NULL){
+    //c=c->parent;
+    //}
     
-    x->rb=false;
+    //x->rb=false;
   }
-  
+  x->rb=false;
 }
