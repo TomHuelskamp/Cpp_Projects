@@ -102,13 +102,14 @@ void rotateLeft(node* n, node* &rt){//used for left rotations
     n->left->right=new node();
     n->left->right->nill=true;
     n->left->right->rb=false;
+    n->left->right->parent=n->left;
     //n->left->right=NULL;
     node* nl=n->left;
     while(nl->right->nill!=true){
     nl=nl->right;
     }
     nl->right=rl;
-    if(nl->right->nill!=true){
+    if(nl->right!=NULL){
       nl->right->parent=nl;
     }
     if(rootParentFix){
@@ -117,7 +118,7 @@ void rotateLeft(node* n, node* &rt){//used for left rotations
       rt->parent=NULL;
     }else{
       n->parent->right=n;
-      while(n->parent->nill!=true){
+      while(n->parent!=NULL){
 	n=n->parent;
       }
       rt=n;
@@ -125,12 +126,14 @@ void rotateLeft(node* n, node* &rt){//used for left rotations
     }
   }else{//ROTATE B, turning an unlinear chain of 3 consecutive numbers into an organized chain from greatest to least
     cout<<"rotate B"<<endl;
-    n->left->nill=true;
+    //n->left->nill=true;
+
+    //
     l->parent=p;
     l->right=n;
     n->parent=l;
     p->right=l;
-    while(p->parent->nill!=true){
+    while(p->parent!=NULL){
       p=p->parent;
     }
     rt=p;
@@ -157,6 +160,7 @@ void rotateRight(node* n, node* &rt){//used for right rotations, this is all ide
     n->right->left=new node();
     n->right->left->nill=true;
     n->right->left->rb=false;
+    n->right->left->parent=n->right;
     //
     node* nr=n->right;
     while(nr->left->nill!=true){
@@ -171,7 +175,7 @@ void rotateRight(node* n, node* &rt){//used for right rotations, this is all ide
       rt->parent=NULL;
     }else{
       n->parent->left=n;
-      while(n->parent->nill!=true){
+      while(n->parent!=NULL){
 	n=n->parent;
       }
       rt=n;
@@ -179,12 +183,14 @@ void rotateRight(node* n, node* &rt){//used for right rotations, this is all ide
     }
   }else{//ROTATE B
     cout<<"rotate B"<<endl;
-    n->right->nill=true;
+    // n->right->nill=true;
+
+    //
     r->parent=p;
     r->left=n;
     n->parent=r;
     p->left=r;
-    while(p->parent->nill!=true){
+    while(p->parent!=NULL){
       p=p->parent;
     }
     rt=p;
