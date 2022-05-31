@@ -25,6 +25,45 @@ void insertMaintenance(node* n, node* &rt);//balances the tree after insert
 void remove(node* root, node* &r, int num);
 void search(node* root, int num);
 void deleteMaintenance(node* x, node* &rt);
+void deleteRotateRight(node* &x);
+void deleteRotateLeft(node* x, node* &rt);
+
+void deleteRotateRight(node* x, node* &rt){
+  node* y=x->left;
+  x->left=y->right;
+  if(y->right->nill!=true){
+    y->right->parent=x;
+  }
+  y->parent=x->parent;
+  if(x->parent==NULL){
+    rt=y;
+  }else if(x==x->parent->right){
+    x->parent->right=y;
+  }else{
+    x->parent->left=y;
+  }
+  y->right=x;
+  x->parent=y;
+}
+void deleteRotateLeft(node* x, node* &rt){
+  node* y=x->right;
+  x->right=y->left;
+  if(y->left->nill!=true){
+    y->left->parent=x;
+  }
+  y->parent=x->parent;
+  if(x->parent==NULL){
+    rt=y;
+  }else if(x==x->parent->right){
+    x->parent->right=y;
+  }else{
+    x->parent->left=y;
+  }
+  y->left=x;
+  x->parent=y;
+  //
+  //while(y->parent!=NULL)
+}
 int main(){
   bool forever=true;
   //node* root=NULL;//creating the tree's root
@@ -464,7 +503,7 @@ void deleteMaintenance(node* x, node* &rt){
     //cout<<"x is NULL"<<endl;
     //}
   node* w;
-  while(x->rb==false&&x!=rt){
+  while(x->rb==false&&x->key!=rt->key){
    
     print(rt,0);
     cout<<"x: "<<x->key<<endl;
@@ -474,40 +513,44 @@ void deleteMaintenance(node* x, node* &rt){
       node* w=x->parent->right;
       if(w->rb==true){
 	//case1
+	cout<<"case 1"<<endl;
+
 	w->rb=false;
 	x->parent->rb=true;
 	cout<<"0004"<<endl;
-
 	//rotateRight(x->parent,rt);
-	
-	rotateLeft(x->parent,rt);
-	//left rotate x->parent
+	//rotateLeft(x->parent,rt);// original
+	deleteRotateLeft(x->parent, rt);
 	w=x->parent->right;
       }
       if(w->right->rb==false&&w->left->rb==false){
 	//case2
+	cout<<"case 2"<<endl;
+	
 	w->rb=true;
 	x=x->parent;
       }else{
 	if(w->right->rb==false){
 	  //case3
+	  cout<<"case 3"<<endl;
+	  
 	  w->left->rb=false;
 	  w->rb=true;
-	  //right rotate w
 	  cout<<"0005"<<endl;
-	  //rotateRight(w,rt);
-	  rotateLeft(w,rt);
+	  //rotateRight(w,rt);// original
+	  deleteRotateRight(w,rt);
 	  w=x->parent->right;
 	}
 	//case4
+	cout<<"case 4"<<endl;
+
 	w->rb=x->parent->rb;
 	x->parent->rb=false;
 	w->right->rb=false;
-	//left rotate x parent
 	cout<<"0006"<<endl;
 	//rotateRight(x->parent,rt);
-	rotateLeft(x->parent, rt);// original;
-	//rt=x;
+	//rotateLeft(x->parent, rt);// original;
+	deleteRotateLeft(x->parent,rt);
 	x=rt;
 	//////RT=X
       }
@@ -522,8 +565,8 @@ void deleteMaintenance(node* x, node* &rt){
 	x->parent->rb=true;
 	cout<<"0007"<<endl;
 	//rotateLeft(x->parent,rt);
-	rotateRight(x->parent,rt);
-	//original
+	//rotateRight(x->parent,rt);//original
+	deleteRotateRight(x->parent,rt);
 	w=x->parent->left;
       }
       if(w->left->rb==false&&w->right->rb==false){
@@ -536,7 +579,8 @@ void deleteMaintenance(node* x, node* &rt){
 	  w->right->rb=false;
 	  w->rb=true;
 	  cout<<"0008"<<endl;
-	  rotateLeft(w,rt);
+	  //rotateLeft(w,rt);// original
+	  deleteRotateLeft(w,rt);
 	  w=x->parent->left;
 	}
 	//case 4
@@ -544,10 +588,10 @@ void deleteMaintenance(node* x, node* &rt){
 	x->parent->rb=false;
 	w->left->rb=false;
 	cout<<"0009"<<endl;
-	//rotateLeft(x->parent, rt);
-	rotateRight(x->parent,rt); //original;
+	//rotateLeft(x->parent,rt);
+	//rotateRight(x->parent,rt);// original
+	deleteRotateRight(x->parent,rt);
 	x=rt;
-	//rt=x;
 	//////x=rt
       }
     }
