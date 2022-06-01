@@ -374,10 +374,11 @@ void insertMaintenance(node* n,node* &rt){
 }
 void remove(node* root, node* &r, int num){
   bool originalrb;
-  if(root==NULL||root->nill==true ||root->key==num){//match
+  if(root==NULL||root->nill==true ||root->key==num){//the tree has been traversed
     if(root==NULL||root->nill==true){
       cout<<"number not foud in the tree"<<endl;
-    }else{//programiz
+    }else{//the node, root, that the user was looking for is found
+      //programiz
       node* x;
       node* p;
       node* y;
@@ -386,8 +387,9 @@ void remove(node* root, node* &r, int num){
       //1.
       originalrb=y->rb;
       //2.
-      if(root->left->nill==true){
+      if(root->left->nill==true){//number's left child is null
 	cout<<"2."<<endl;
+	//replace number with its right child
 	x=root->right;
 	if(root->parent==NULL){
 	  r=x;
@@ -401,8 +403,9 @@ void remove(node* root, node* &r, int num){
 	}
       }
       //3.
-      else if(root->right->nill==true){
+      else if(root->right->nill==true){//number's right child is null
 	cout<<"3."<<endl;
+	//replace number with its left child
 	x=root->left;
 	if(root->parent==NULL){
 	  r=x;
@@ -414,7 +417,8 @@ void remove(node* root, node* &r, int num){
 	x->parent=root->parent;
       }
       //4.
-      else{
+      else{//number has two children
+	//number has to be replaced with the next highest number
 	cout<<"4."<<endl;
 	node* y=root->left;
 	while(y->right->nill!=true){
@@ -422,6 +426,7 @@ void remove(node* root, node* &r, int num){
 	}
 	originalrb=y->rb;
 	x=y->left;
+	//replace the next highest number with its left child, there is no right child 
 	if(y->parent==NULL){
 	  r=x;
 	}else if(y==y->parent->right){
@@ -430,7 +435,7 @@ void remove(node* root, node* &r, int num){
 	  y->parent->left=x;
 	}
 	x->parent=y->parent;
-	
+	//replace number with the next highest number
 	if(root->parent==NULL){
 	  r=y;
 	}else if(root==root->parent->right){
@@ -445,58 +450,60 @@ void remove(node* root, node* &r, int num){
 	y->right->parent=y;
 	y->rb=root->rb;      
       }
-      delete root;
+      delete root;//delete number
       
-      if(originalrb==false){
-	deleteMaintenance(x,r);
+      if(originalrb==false){//if the color tracker for number
+	deleteMaintenance(x,r);//balance the tree using the furthest deletion
       }
     }
-  }else if(num<root->key){
+  }else if(num<root->key){//traverse tree to find number
     remove(root->left,r,num);
   }else{
     remove(root->right,r,num);
   }
 }
-void search(node* root, int num){
-  if(root==NULL||root->nill==true){
+void search(node* root, int num){//searches for any number in the tree using the same function as was used in remove
+  if(root==NULL||root->nill==true){//no match
     cout<<"the number you are searching for cannot be found"<<endl;
-  }else if(root->key==num){
+  }else if(root->key==num){//match
     cout<<num<<" is in the tree"<<endl;
-  }else if(num<root->key){
+  }else if(num<root->key){//traverse
     search(root->left,num);
   }else{
     search(root->right,num);
   }
 }
-void deleteMaintenance(node* x, node* &rt){
+void deleteMaintenance(node* x, node* &rt){//balances the tree after deletion
   print(rt,0);
   cout<<endl<<"Delete Maintenance"<<endl;
   node* w;
   cout<<x->key<<endl;
   while(x->rb==false&&x->key!=rt->key){
-   
     print(rt,0);
     cout<<"x: "<<x->key<<endl;
 
-    if(x==x->parent->left){
+    if(x==x->parent->left){//x is on the left
       cout<<"left"<<endl;
-      node* w=x->parent->right;
-      if(w->rb==true){
+      node* w=x->parent->right;//uncle
+      if(w->rb==true){//uncle is red
 	//case1
+	//push uncle's color to parent and rotate parent left
 	cout<<"case 1"<<endl;
 	w->rb=false;
 	x->parent->rb=true;
 	deleteRotateLeft(x->parent, rt);
 	w=x->parent->right;
       }
-      if(w->right->rb==false&&w->left->rb==false){
+      if(w->right->rb==false&&w->left->rb==false){//uncle's children are black
 	//case2
+	//uncle is red
 	cout<<"case 2"<<endl;
 	w->rb=true;
 	x=x->parent;
       }else{
-	if(w->right->rb==false){
+	if(w->right->rb==false){//uncle left is red, right is black
 	  //case3
+	  //left is black, red, rotated right, so that left replaces
 	  cout<<"case 3"<<endl;
 	  w->left->rb=false;
 	  w->rb=true;
@@ -504,6 +511,7 @@ void deleteMaintenance(node* x, node* &rt){
 	  w=x->parent->right;
 	}
 	//case4
+	//push parent's color to uncle, parent black, uncle right black, right replaces uncle
 	cout<<"case 4"<<endl;
 	w->rb=x->parent->rb;
 	x->parent->rb=false;
@@ -512,7 +520,7 @@ void deleteMaintenance(node* x, node* &rt){
 	x=rt;
       }
     }
-    else{
+    else{//x is on the right, everything is the left but flipped
       cout<<"right"<<endl;
       node* w=x->parent->left;
       if(w->rb==true){
