@@ -1,10 +1,11 @@
 #include <iostream>
 #include <cstring>
 using namespace std;
+/**
 struct node{
   char name[10];
   node* connections[20];
-  node* weights[20];
+  int  weights[20];
 };
 void adjacencyTable(node* table[20]);
 void addVertex(node* table[20]);
@@ -35,16 +36,16 @@ int main(){
 void addVertex(node* table[20]){
   cout<<"Add Vertex"<<endl;
   cout<<"name: ";
-  node* n;
+  node* n = new node();;
   cin>>n->name;
   cin.get();
   for(int i=0; i<20; i++){
-    if(table[i]->name==n->name){
-      cout<<"there is already a vertex with this name"<<endl;
-      break;
-    }else if(table[i]==NULL){
+    if(table[i]==NULL){
       table[i]=n;
       cout<<"added"<<endl;
+      break;
+    }else if(strcmp(table[i]->name,n->name)==0){
+      cout<<"a vertex already has this name"<<endl;
       break;
     }
   }
@@ -52,10 +53,21 @@ void addVertex(node* table[20]){
 void addEdge(node* table[20]){
   cout<<"Add Edge"<<endl;
   cout<<"first name: ";
-  char name1[20];
+  char n1[20];
   cout<<"second name: ";
-  char name2[20];
+  char n2[20];
   cout<<"weight: ";
+  int wt;
+  for(int i=0; i<20; i++){
+    if(table[i]!=NULL){
+      if(strcmp(table[i]->name,n1)==0){
+	for(int j; j<20; j++){
+	}
+      }
+    }else{
+      cout<<"vertices couldn't be found"<<endl;
+    }
+  }
 }
 void adjacencyTable(node* table[20]){
   for(int i=0; i<20; i++){
@@ -63,4 +75,32 @@ void adjacencyTable(node* table[20]){
       cout<<table[i]->name<<", ";
     }
   }
+  cout<<endl;
+}
+**/
+struct node{
+  char name[10];
+};
+void addVertex(int **connections, node* **names);
+int main(){
+  int connections[20][20];
+  node* names[20][20];
+  bool loop=true;
+  while(loop){
+    cout<<"add 'vertex', add 'edge', print 'table', or 'quit'?: ";
+    char input[10];
+    cin.get(input,10);
+    cin.get();
+    if(strcmp(input,"vertex")==0){
+      
+    }else if(strcmp(input,"edge")==0){
+
+    }else if(strcmp(input,"table")==0){
+
+    }else{
+    }
+  }
+  return 0;
+}
+void addVertex(int **connections, node* **names){
 }
