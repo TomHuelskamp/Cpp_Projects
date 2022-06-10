@@ -83,6 +83,8 @@ struct node{
 };
 void addVertex(int** connections, node*** names);
 void addEdge(int** connections, node*** names);
+void adjacencyTable(int** connections, node*** names);
+///void 
 int main(){
   int** connections= new int*[20];
   node*** names=new node**[20];
@@ -110,48 +112,73 @@ int main(){
 
     }else{
     }
+    adjacencyTable(connections,names);
   }
   return 0;
 }
 void addVertex(int** connections, node*** names){
   cout<<"add vertex"<<endl;
   cout<<"name: ";
-  node* n=new node();
-  cin>>n->name;
+  char nn[10];
+  cin.get(nn, 10);
   cin.get();
-  for(int e=0; e<20; e++){
+
+  for(int e=1; e<20; e++){
     if(!names[0][e]){
-      names[0][e]=n;
-      names[e][0]=n;
+      names[0][e]=new node();
+      names[e][0]=new node();
+      strcpy(names[0][e]->name,nn);
+      strcpy(names[e][0]->name,nn);
       break;
     }
   }
 }
 void addEdge(int** connections, node*** names){
   cout<<"add edge"<<endl;
-  cout<<"name 1: ";
+  cout<<"vertex 1: ";
   char name1[10];
   cin.get(name1, 10);
   cin.get();
-  cout<<"name 2: ";
+  cout<<"vertex 2: ";
   char name2[10];
   cin.get(name2, 10);
   cin.get();
   bool found=false;
   for(int y=0; y<20; y++){
     for(int x=0; x<20; x++){
-      if((names[y][0]->name==name1 && names[0][x]->name==name2)||(names[y][0]->name==name2 && names[0][x]->name==name1)){
-	int size;
-	cout<<"distance: ";
-	cin>>size;
-	cin.get();
-	connections[y][x]=size;
-	connections[x][y]=size;
-	found=true;
+      if(names[y][0]!=NULL&&names[0][x]!=NULL){
+	if(strcmp(names[y][0]->name,name1)==0 && strcmp(names[0][x]->name,name2)==0){
+	  int size;
+	  cout<<"distance: ";
+	  cin>>size;
+	  cin.get();
+	  connections[x][y]=size;
+	  found=true;
+      }
       }
     }
   }
   if(!found){
-    cout<<"your chosen vertices couldn't be found";
+    cout<<"your chosen vertices couldn't be found"<<endl;
+  }
+}
+void adjacencyTable(int** connections, node*** names){
+  for(int y=0; y<20; y++){
+    for(int x=0; x<20; x++){
+      if(names[y][x]!=NULL){
+	cout<<names[y][x]->name;
+      }else{
+	cout<<"_";
+      }
+      cout<<" ";
+    }
+    cout<<endl;
+  }
+  for(int y=0; y<20; y++){
+    for(int x=0; x<20; x++){
+      cout<<connections[y][x];
+      cout<<" ";
+    }
+    cout<<endl;
   }
 }
