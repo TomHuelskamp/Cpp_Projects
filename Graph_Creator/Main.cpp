@@ -79,7 +79,7 @@ void adjacencyTable(node* table[20]){
 }
 **/
 struct node{
-  char name[10];
+  char name[5];
 };
 void addVertex(int** connections, node*** names);
 void addEdge(int** connections, node*** names);
@@ -100,27 +100,37 @@ int main(){
   }
   bool loop=true;
   while(loop){
-    cout<<"add 'vertex', add 'edge', print 'table', or 'quit'?: ";
-    char input[10];
-    cin.get(input,10);
-    cin.get();
-    if(strcmp(input,"vertex")==0){
-      addVertex(connections, names);
-    }else if(strcmp(input,"edge")==0){
-      addEdge(connections, names);
-    }else if(strcmp(input,"table")==0){
 
-    }else{
+    cout<<"'add vertex', 'add edge', 'print table', 'remove vertex', 'remove edge', or 'quit'?: ";
+    char input[25];
+    cin.get(input,25);
+    cin.get();
+    if(strcmp(input,"add vertex")==0){
+      addVertex(connections, names);
+    }else if(strcmp(input,"add edge")==0){
+      addEdge(connections, names);
+    }else if(strcmp(input,"print table")==0){
+      adjacencyTable(connections,names);
+    }else if(strcmp(input,"remove vertex")==0){
+
+    }else if(strcmp(input,"remove edge")==0){
+
+    }else if(strcmp(input,"quit")==0){
+      break;
     }
-    adjacencyTable(connections,names);
+    //else{
+    //cout<<"you entered an invalid input, or a vertex that was more than 5 characters"<<endl;
+    //cin.ignore(200);
+    //}
+    //adjacencyTable(connections,names);
   }
   return 0;
 }
 void addVertex(int** connections, node*** names){
   cout<<"add vertex"<<endl;
-  cout<<"name: ";
-  char nn[10];
-  cin.get(nn, 10);
+  cout<<"name(must be 4 or less characters!): ";
+  char nn[5];
+  cin.get(nn, 5);
   cin.get();
 
   for(int e=1; e<20; e++){
@@ -136,13 +146,15 @@ void addVertex(int** connections, node*** names){
 void addEdge(int** connections, node*** names){
   cout<<"add edge"<<endl;
   cout<<"vertex 1: ";
-  char name1[10];
-  cin.get(name1, 10);
+  char name1[5];
+  cin.get(name1, 5);
   cin.get();
+  
   cout<<"vertex 2: ";
-  char name2[10];
-  cin.get(name2, 10);
+  char name2[5];
+  cin.get(name2, 5);
   cin.get();
+  
   bool found=false;
   for(int y=0; y<20; y++){
     for(int x=0; x<20; x++){
@@ -165,6 +177,30 @@ void addEdge(int** connections, node*** names){
 void adjacencyTable(int** connections, node*** names){
   for(int y=0; y<20; y++){
     for(int x=0; x<20; x++){
+      if(y==0||x==0){//name
+	if(names[y][x]!=NULL){
+	  int size=5-strlen(names[y][x]->name);
+	  cout<<names[y][x]->name;
+	  while(size>0){
+	    cout<<" ";
+	    size--;
+	  }
+	}else if(x==0&&y==0){
+	  cout<<"     ";
+	}else{
+	  cout<<"-----";
+	}
+      }else{//distance
+	cout<<""<<connections[y][x]<<"    ";
+      }
+      cout<<" ";
+    }
+    cout<<endl;
+  }
+
+
+  /**for(int y=0; y<20; y++){
+    for(int x=0; x<20; x++){
       if(names[y][x]!=NULL){
 	cout<<names[y][x]->name;
       }else{
@@ -180,5 +216,5 @@ void adjacencyTable(int** connections, node*** names){
       cout<<" ";
     }
     cout<<endl;
-  }
+    }**/
 }
