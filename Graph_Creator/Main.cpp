@@ -9,7 +9,7 @@ void addEdge(int** connections, node*** names);
 void adjacencyTable(int** connections, node*** names);
 void removeVertex(int** connections, node*** names);
 void removeEdge(int** connections, node*** names);
-void shortestPath(iny** connections, node**** names);
+void shortestPath(int** connections, node*** names);
 int main(){
   int** connections= new int*[20];
   node*** names=new node**[20];
@@ -25,8 +25,7 @@ int main(){
   }
   bool loop=true;
   while(loop){
-
-    cout<<"'add vertex', 'add edge', 'print table', 'remove vertex', 'remove edge', or 'quit'?: ";
+    cout<<"'add vertex', 'add edge', 'print table', 'remove vertex', 'remove edge', 'find shortest path', or 'quit'?: ";
     char input[25];
     cin.get(input,25);
     cin.get();
@@ -42,6 +41,8 @@ int main(){
       removeEdge(connections,names);
     }else if(strcmp(input,"quit")==0){
       break;
+    }else if(strcmp(input,"find shortest path")==0){
+      shortestPath(connections,names);
     }
   }
   return 0;
@@ -158,4 +159,16 @@ void removeEdge(int** connections, node*** names){
   }
 }
 void shortestPath(int** connections, node*** names){
+  char start[5];
+  cout<<"starting vertex: ";
+  cin.get(start,5);
+  cin.get();
+  char destination[5];
+  cout<<"destination vertex: ";
+  cin.get(destination,5);
+  cin.get();
+  for(int y=0; y<20; y++){
+    for(int x=0; x<20; x++){
+    }
+  }
 }
