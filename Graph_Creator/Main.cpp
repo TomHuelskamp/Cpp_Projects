@@ -167,8 +167,32 @@ void shortestPath(int** connections, node*** names){
   cout<<"destination vertex: ";
   cin.get(destination,5);
   cin.get();
+  bool spresent=false;
+  bool dpresent=false;
+  bool present=false;
+  int X;
+  int Y;
+  int connections2[20][20]=connections;
+  int unvisitedIndexes[20];
+  int distances[2][20];
+  for(int i=0; i<20; i++){
+    unvisitedIndexes[i]=i;
+    distances[0][i]=i;
+  }
   for(int y=0; y<20; y++){
     for(int x=0; x<20; x++){
+      
+    }
+  }
+  for(int y=0; y<20; y++){
+    for(int x=0; x<20; x++){
+      if(names[y][x]!=NULL&&strcmp(names[y][x]->name,start)==0){
+	X=x;
+	spresent=true;
+	for(int i=0; i<20; i++){
+	  ditances[1][i]=connections[i][X];
+	}
+      }
     }
   }
 }
