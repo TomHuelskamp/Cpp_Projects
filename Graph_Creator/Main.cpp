@@ -9,6 +9,7 @@ void addEdge(int** connections, node*** names);
 void adjacencyTable(int** connections, node*** names);
 void removeVertex(int** connections, node*** names);
 void removeEdge(int** connections, node*** names);
+void shortestPath(iny** connections, node**** names);
 int main(){
   int** connections= new int*[20];
   node*** names=new node**[20];
@@ -150,7 +151,11 @@ void removeEdge(int** connections, node*** names){
   cin.get();
   for(int y=0; y<20; y++){
     for(int x=0; x<20; x++){
-
+      if(names[y][0]!=NULL&&names[0][x]!=NULL&&strcmp(names[y][0]->name,vertex1)==0&&strcmp(names[0][x]->name,vertex2)==0){
+	connections[y][x]=0;
+      }
     }
   }
+}
+void shortestPath(int** connections, node*** names){
 }
