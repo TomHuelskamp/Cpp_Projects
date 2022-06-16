@@ -172,27 +172,46 @@ void shortestPath(int** connections, node*** names){
   bool present=false;
   int X;
   int Y;
-  int connections2[20][20]=connections;
-  int unvisitedIndexes[20];
-  int distances[2][20];
-  for(int i=0; i<20; i++){
-    unvisitedIndexes[i]=i;
-    distances[0][i]=i;
+  //int connections2[20][20];
+  int** connections2 = new int*[20];
+  for(int a=0; a<20; a++){
+    connections2[a]=new int[20];
   }
   for(int y=0; y<20; y++){
     for(int x=0; x<20; x++){
-      
+      connections2[y][x]=connections[y][x];
     }
   }
-  for(int y=0; y<20; y++){
-    for(int x=0; x<20; x++){
-      if(names[y][x]!=NULL&&strcmp(names[y][x]->name,start)==0){
-	X=x;
-	spresent=true;
-	for(int i=0; i<20; i++){
-	  ditances[1][i]=connections[i][X];
+  for(int i=0; i<20; i++){
+      if(names[0][i]!=NULL&&strcmp(names[0][i]->name,start)==0){
+	X=i;	
+	cout<<"start found"<<endl;
+      }
+      if(names[i][0]!=NULL&&strcmp(names[i][0]->name,destination)==0){
+	Y=i;
+	cout<<"destination found"<<endl;
+      }
+  }
+  for(int x=1; x<20; x++){//x
+    for(int y=1; y<20; y++){
+      for(int nx=1; nx<20; nx++){//x
+	for(int ny=1; ny<20; ny++){
+	  if(y!=x){//&&y!=ny...
+	    cout<<"x:"<<x<<"y:"<<y<<endl;
+	    cout<<"nx:"<<nx<<"ny:"<<ny<<endl;
+	    if((connections2[y][x]==0||connections2[y][x]>connections2[y][nx]+connections2[ny][x])&&connections2[y][nx]+connections2[ny][x]>0){
+	      cout<<"x:"<<x<<"y:"<<y<<"_:"<<connections2[y][nx]+connections2[ny][x]<<endl;
+	      connections2[y][x]=connections2[y][nx]+connections2[ny][x];
+	    }
+	  }
 	}
       }
     }
+  }
+  adjacencyTable(connections2,names);
+  if(connections2[Y][X]>0){
+    cout<<"distance-> "<<connections[Y][X]<<endl;
+  }else{
+    cout<<"no connection"<<endl;
   }
 }
